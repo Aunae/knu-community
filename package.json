@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbo",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prisma:gen": "npx prisma generate",
+    "prisma:dev": "npx prisma migrate dev --name dev",
+    "prisma:reset": "npx prisma migrate reset"
   },
   "dependencies": {
     "@next/font": "13.1.1",
