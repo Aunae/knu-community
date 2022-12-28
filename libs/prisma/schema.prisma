@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://postgres:example@localhost:5433/example?schema=public"
+  url      = env("DATABASE_URL")
 }
 
 
@@ -15,4 +15,14 @@ model User {
   id String @id @default(uuid())
   name String
   email String @unique
+  password String
 }
+
+model Category {
+  id String @id @default(uuid())
+  name String
+  parentId String?
+  parent Category? @relation("categories", fields: [parentId], references: [id])
+  children Category[] @relation("categories")
+}
+
