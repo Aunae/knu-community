@@ -1,5 +1,5 @@
 import { ResponseEntity } from '../response';
-import { Category } from '../../../models/category';
+import { CategoryWithChildren } from '../../../models/category';
 
-export type CategoryResponse = ResponseEntity<Category>;
-export type CategoriesResponse = ResponseEntity<Category[]>;
+export type CategoryResponse = ResponseEntity<CategoryWithChildren>;
+export type CategoriesResponse = ResponseEntity<CategoryWithChildren[]>;

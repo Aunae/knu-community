@@ -6,4 +6,4 @@ const categoryWithChildren = Prisma.validator<Prisma.CategoryArgs>()({
   },
 });
 
-export type Category = Prisma.CategoryGetPayload<typeof categoryWithChildren>;
+export type CategoryWithChildren = Prisma.CategoryGetPayload<typeof categoryWithChildren>;

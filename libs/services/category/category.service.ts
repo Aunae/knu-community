@@ -1,19 +1,29 @@
-import { Category } from '../../models/category';
+import { prismaClient } from '../../prisma/prisma.client';
+import { Prisma } from '.prisma/client';
 import { CategoriesResponse } from '../../api-interfaces/response/category/category.interface';
+import CategoryCreateArgs = Prisma.CategoryCreateArgs;
 
-export const getMockCategories = () => {
-  const mockCategories: Category[] = [
-    { id: '1', name: '자유게시판', children: [], parentId: '' },
-    { id: '2', name: '유머게시판', children: [], parentId: '' },
-    { id: '3', name: '자치구역', children: [], parentId: '' },
-    { id: '4', name: '코드리뷰', children: [], parentId: '' },
-  ];
+export const createCategory = async (createCategoryDto: CategoryCreateArgs) => {
+  const category = await prismaClient.category.create(createCategoryDto);
+  return category;
+};
 
-  const mockResult: CategoriesResponse = {
-    data: mockCategories,
-    message: 'this is mock result',
-    status: 200,
-  };
+export const getCategories = async (): Promise<CategoriesResponse> => {
+  const categories = await prismaClient.category.findMany({
+    where: {
+      parent: null,
+    },
+    include: {
+      children: {
+        orderBy: [{ name: 'asc' }],
+      },
+    },
+    orderBy: [
+      {
+        name: 'asc',
+      },
+    ],
+  });
 
-  return Promise.resolve(mockResult);
+  return { data: categories, message: 'success', status: 200 };
 };

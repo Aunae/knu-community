@@ -1,14 +1,14 @@
 import Link from 'next/link';
-import { Category } from '../header';
 import { useState } from 'react';
 import Image from 'next/image';
+import { CategoryWithChildren } from '../../../../libs/models/category';
 
 /** Todo: Replace to Icon */
 const DownIcon = 'https://img.icons8.com/ios-glyphs/30/null/long-arrow-down.png';
 const UpIcon = 'https://img.icons8.com/ios-glyphs/30/null/long-arrow-up.png';
 
 interface Props {
-  category: Category;
+  category: CategoryWithChildren;
 }
 
 const Accordion = ({ category }: Props) => {
@@ -29,7 +29,7 @@ const Accordion = ({ category }: Props) => {
 
       {/*Content*/}
       <div className={`${!openSubCategory && 'hidden'} grid grid-cols-2`}>
-        {category.subCategories?.map((subCategory) => (
+        {category.children?.map((subCategory) => (
           <Link href={category.id} key={subCategory.id} className={'block px-4 py-2 text-white font-bold rounded hover:bg-gray-700'}>
             <p className={'text-black'}>{subCategory.name}</p>
           </Link>
