@@ -1,4 +1,4 @@
-export default function Head() {
+const Head = () => {
   return (
     <>
       <title>KNU</title>
@@ -7,4 +7,6 @@ export default function Head() {
       <link rel="icon" href="/favicon.ico" />
     </>
   );
-}
+};
+
+export default Head;

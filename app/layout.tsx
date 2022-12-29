@@ -1,15 +1,15 @@
 import './globals.css';
-import HeaderWrapper from '../components/common/header/header-wrapper';
+import { ReactNode } from 'react';
 
-const RootLayout = ({ children }: { children: React.ReactNode }) => {
+interface Props {
+  children: ReactNode;
+}
+
+const RootLayout = ({ children }: Props) => {
   return (
     <html lang="en">
       <head />
-      <body>
-        {/* @ts-expect-error Server Component */}
-        <HeaderWrapper />
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 };
