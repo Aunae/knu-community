@@ -25,3 +25,9 @@ export const getPosts = async (): Promise<PostsResponse> => {
   });
   return { data: posts, message: 'success', status: HTTP_STATUS.OK };
 };
+
+export const postService = {
+  createPost,
+  getPost,
+  getPosts,
+};

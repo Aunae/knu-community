@@ -1,7 +1,7 @@
 import { prismaClient } from '../prisma/prisma.client';
-import { createPost, getPosts } from '../services/post/post.service';
+import { postService } from '../services/post/post.service';
 import { createMockUsers } from './mock-user';
-import { getUsers } from '../services/user/user.service';
+import { userService } from '../services/user/user.service';
 import { getMockCategories } from './mock-category';
 import { CategoryWithChildren } from '../models/category';
 
@@ -12,7 +12,7 @@ export const createMockPost = async () => {
   }
 
   await createMockUsers();
-  const { data: users } = await getUsers();
+  const { data: users } = await userService.getUsers();
 
   const { data: parentCategories } = await getMockCategories();
   let children: CategoryWithChildren[] = [];
@@ -23,7 +23,7 @@ export const createMockPost = async () => {
 
   let categorySequence = 0;
   users.map((user) => {
-    createPost({
+    postService.createPost({
       data: {
         title: 'Mock title',
         description: 'mock description',
@@ -36,5 +36,5 @@ export const createMockPost = async () => {
 
 export const getMockPosts = async () => {
   await createMockPost();
-  return await getPosts();
+  return await postService.getPosts();
 };
