@@ -1,14 +1,17 @@
 import './globals.css';
-import Header from '../components/common/header/header';
+import HeaderWrapper from '../components/common/header/header-wrapper';
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
       <head />
       <body>
-        <Header />
+        {/* @ts-expect-error Server Component */}
+        <HeaderWrapper />
         {children}
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;
