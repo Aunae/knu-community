@@ -1,0 +1,49 @@
+import { HTTP_METHOD } from '../constants/http';
+
+const baseURL = '/api-client';
+
+const get = <T>(url: string): Promise<T> => {
+  const configs: RequestInit = {
+    method: HTTP_METHOD.GET,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  return fetch(`${baseURL}/${url}`, configs).then(handleResponse);
+};
+
+const post = <T>(url: string, data?: any): Promise<T> => {
+  const configs: RequestInit = {
+    method: HTTP_METHOD.POST,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  };
+
+  return fetch(`${baseURL}/${url}`, configs).then(handleResponse);
+};
+
+const handleResponse = (response: Response) => {
+  return response.text().then((text) => {
+    const data = text && JSON.parse(text);
+
+    if (!response.ok) {
+      if ([401, 403].includes(response.status)) {
+        // auto logout if 401 Unauthorized or 403 Forbidden response returned from api-client
+      }
+
+      const error = (data && data.message) || response.statusText;
+      return Promise.reject(error);
+    }
+
+    return data;
+  });
+};
+
+// Todo: add auth interceptor
+export const nextBackendClient = {
+  get,
+  post,
+};
