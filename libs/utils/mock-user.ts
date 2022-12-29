@@ -1,6 +1,6 @@
 import { prismaClient } from '../prisma/prisma.client';
 import { Prisma } from '.prisma/client';
-import { createUser } from '../services/user/user.service';
+import { userService } from '../services/user/user.service';
 import UserCreateInput = Prisma.UserCreateInput;
 
 export const createMockUsers = async () => {
@@ -28,5 +28,5 @@ export const createMockUsers = async () => {
     },
   ];
 
-  await Promise.all(dtos.map((dto) => createUser(dto)));
+  await Promise.all(dtos.map((dto) => userService.createUser(dto)));
 };
