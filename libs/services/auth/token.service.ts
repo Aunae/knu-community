@@ -1,6 +1,8 @@
-import { authApiClient } from '../../api/auth-api.client';
+import { authApiClient } from '../../api-client/auth-api.client';
 import { GenerateAccessTokenResponse } from '../../api-interfaces/response/auth/auth.interface';
 
-export const regenerateAccessToken = (refreshToken: string): Promise<GenerateAccessTokenResponse> => {
+const regenerateAccessToken = (refreshToken: string): Promise<GenerateAccessTokenResponse> => {
   return authApiClient.post<GenerateAccessTokenResponse>('/refresh', { refreshToken });
 };
+
+export const authService = { regenerateAccessToken };
