@@ -1,4 +1,4 @@
-import { HTTP_METHOD } from '../constants/http';
+import { HTTP_METHOD, HTTP_STATUS } from '../constants/http';
 
 const baseURL = '/api-client';
 
@@ -30,7 +30,7 @@ const handleResponse = (response: Response) => {
     const data = text && JSON.parse(text);
 
     if (!response.ok) {
-      if ([401, 403].includes(response.status)) {
+      if ([HTTP_STATUS.UNAUTHORIZED, HTTP_STATUS.FORBIDDEN].includes(response.status)) {
         // auto logout if 401 Unauthorized or 403 Forbidden response returned from api-client
       }
 
