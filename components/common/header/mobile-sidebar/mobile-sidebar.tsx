@@ -1,9 +1,9 @@
-import { Category } from '../header';
 import Accordion from './accordion';
+import { CategoryWithChildren } from '../../../../libs/models/category';
 
 interface Props {
   // children: ReactNode;
-  categories: Category[];
+  categories: CategoryWithChildren[];
   open: Boolean;
   handleClose: () => void;
 }
