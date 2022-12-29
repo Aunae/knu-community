@@ -3,12 +3,12 @@ import { Prisma } from '.prisma/client';
 import { CategoriesResponse } from '../../api-interfaces/response/category/category.interface';
 import CategoryCreateArgs = Prisma.CategoryCreateArgs;
 
-export const createCategory = async (createCategoryDto: CategoryCreateArgs) => {
+const createCategory = async (createCategoryDto: CategoryCreateArgs) => {
   const category = await prismaClient.category.create(createCategoryDto);
   return category;
 };
 
-export const getCategories = async (): Promise<CategoriesResponse> => {
+const getCategories = async (): Promise<CategoriesResponse> => {
   const categories = await prismaClient.category.findMany({
     where: {
       parent: null,
@@ -27,3 +27,5 @@ export const getCategories = async (): Promise<CategoriesResponse> => {
 
   return { data: categories, message: 'success', status: 200 };
 };
+
+export const categoryService = { createCategory, getCategories };

@@ -1,12 +1,12 @@
 import { prismaClient } from '../prisma/prisma.client';
 import { CategoriesResponse } from '../api-interfaces/response/category/category.interface';
-import { createCategory, getCategories } from '../services/category/category.service';
+import { categoryService } from '../services/category/category.service';
 import { Prisma } from '.prisma/client';
 import CategoryCreateInput = Prisma.CategoryCreateInput;
 
 export const getMockCategories = async (): Promise<CategoriesResponse> => {
   await createMockCategory();
-  return await getCategories();
+  return await categoryService.getCategories();
 };
 
 export const createMockCategory = async () => {
@@ -32,10 +32,10 @@ export const createMockCategory = async () => {
     },
   ];
 
-  const categories = await Promise.all(dtos.map((dto) => createCategory({ data: dto })));
+  const categories = await Promise.all(dtos.map((dto) => categoryService.createCategory({ data: dto })));
   categories.map((category) => {
     for (let i = 1; i < 4; i++) {
-      createCategory({
+      categoryService.createCategory({
         data: {
           parentId: category.id,
           name: `서브 게시판 ${i}`,
