@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,19 +7,33 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id String @id @default(uuid())
-  name String
-  email String @unique
-  password String
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  posts     Post[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Category {
-  id String @id @default(uuid())
-  name String
+  id       String     @id @default(uuid())
+  name     String
   parentId String?
-  parent Category? @relation("categories", fields: [parentId], references: [id])
+  parent   Category?  @relation("categories", fields: [parentId], references: [id])
   children Category[] @relation("categories")
+  posts    Post[]
 }
 
+model Post {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id])
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
