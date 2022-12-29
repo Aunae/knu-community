@@ -1,8 +1,12 @@
 'use client';
-
 import { useState } from 'react';
+import { getProviders, signIn } from 'next-auth/react';
 
-const LoginForm = () => {
+interface Props {
+  providers: Awaited<ReturnType<typeof getProviders>>;
+}
+
+const LoginForm = ({ providers }: Props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -47,6 +51,21 @@ const LoginForm = () => {
           </div>
         </div>
       </form>
+      <div className="bg-amber-100">
+        {Object.values(providers!).map((provider) => (
+          <div key={provider.id} className="bg-blue-200">
+            <button
+              onClick={() =>
+                signIn(provider.id, {
+                  callbackUrl: process.env.BASE_URL || 'http://localhost:3000 ',
+                })
+              }
+            >
+              Login with {provider.name}
+            </button>
+          </div>
+        ))}
+      </div>
     </>
   );
 };
