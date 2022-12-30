@@ -12,10 +12,10 @@ const AuthorizedSidebar = ({ handleClose, categories }: Props) => {
     <nav>
       <div className="grid grid-cols-2 gap-2 justify-center text-center">
         <>
-          <Link href="/profile" onClick={handleClose} className="border-2 text-gray-800 hover:text-gray-300">
+          <Link href="/profile" onClick={handleClose} className="border-2 text-gray-800 hover:text-blue-300">
             마이페이지
           </Link>
-          <Link href="/logout" onClick={handleClose} className="border-2 text-gray-800 hover:text-gray-300">
+          <Link href="/logout" onClick={handleClose} className="border-2 text-gray-800 hover:text-blue-300">
             로그아웃
           </Link>
         </>

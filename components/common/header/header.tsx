@@ -28,12 +28,12 @@ const Header = ({ categories }: Props) => {
 
   return (
     <>
-      <div className="flex static justify-between items-center bg-blue-400 rounded-b-sm shadow-sm">
-        <button onClick={handleDrawerOpen}>
+      <div className="flex static justify-between items-center p-6 bg-blue-600 rounded-b-sm shadow-sm">
+        <button className="text-white" onClick={handleDrawerOpen}>
           <MenuIcon size={50} />
         </button>
-        <h1 className="text-4xl font-extrabold tracking-tight text-white">KNU</h1>
-        <button>
+        <h1 className="text-7xl font-extrabold tracking-tight text-white">KNU</h1>
+        <button className="text-white">
           <SearchIcon size={50} />
         </button>
       </div>
