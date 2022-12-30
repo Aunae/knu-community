@@ -18,9 +18,9 @@ const Accordion = ({ category }: Props) => {
   return (
     <>
       {/*Header*/}
-      <div onClick={handleOpenAccordion} className={'grid grid-cols-1 block px-4 py-2 text-white font-bold rounded hover:bg-gray-700'}>
-        <div className={'flex justify-between'}>
-          <p className={'text-black'}>{category.name}</p>
+      <div onClick={handleOpenAccordion} className="grid grid-cols-1 block px-4 py-2 text-white font-bold rounded hover:bg-gray-700">
+        <div className="flex justify-between">
+          <p className="text-black">{category.name}</p>
 
           {/*Todo: replace icon*/}
           <Image src={openSubCategory ? UpIcon : DownIcon} width={15} height={15} alt={'menu'} />
@@ -30,8 +30,8 @@ const Accordion = ({ category }: Props) => {
       {/*Content*/}
       <div className={`${!openSubCategory && 'hidden'} grid grid-cols-2`}>
         {category.children?.map((subCategory) => (
-          <Link href={category.id} key={subCategory.id} className={'block px-4 py-2 text-white font-bold rounded hover:bg-gray-700'}>
-            <p className={'text-black'}>{subCategory.name}</p>
+          <Link href={category.id} key={subCategory.id} className="block px-4 py-2 text-white font-bold rounded hover:bg-gray-700">
+            <p className="text-black">{subCategory.name}</p>
           </Link>
         ))}
       </div>
