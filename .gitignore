@@ -40,3 +40,6 @@ libs/prisma/migrations
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# dev sqlite db
+libs/prisma/dev.db
