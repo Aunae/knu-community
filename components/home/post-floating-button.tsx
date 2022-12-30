@@ -1,12 +1,17 @@
 'use client';
-import FloatingButton from '../common/floating-button/floating-button';
+import FloatingButtonWrapper from '../common/floating-button/floating-button-wrapper';
+import { MdEdit as WriteIcon } from 'react-icons/md';
 
 const createPost = () => {
-  console.log(`Created post!`);
+  console.log(`Create post service`);
 };
 
 const PostFloatingButton = () => {
-  return <FloatingButton onClickHandler={createPost} />;
+  return (
+    <FloatingButtonWrapper onClickHandler={createPost}>
+      <WriteIcon />
+    </FloatingButtonWrapper>
+  );
 };
 
 export default PostFloatingButton;
