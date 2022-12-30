@@ -1,7 +1,7 @@
 import PostSection from './post-section';
-import PostFloatingButton from '../../components/home/post-floating-button';
 import { ReactNode } from 'react';
 import { Session } from 'next-auth';
+import PostFloatingButton from '../../components/home/post-floating-button';
 
 interface Props {
   children: ReactNode;
