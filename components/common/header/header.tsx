@@ -37,7 +37,7 @@ const Header = ({ categories }: Props) => {
           <MdMenu size={50} />
         </button>
         {/*<Image onClick={handleDrawerOpen} src={MenuIcon} width={50} height={50} alt={'menu'} />*/}
-        <p className="text-gray-300">KNU</p>
+        <h1 className="text-4xl font-extrabold tracking-tight text-white">KNU</h1>
         <button>
           <MdSearch size={50} />
         </button>

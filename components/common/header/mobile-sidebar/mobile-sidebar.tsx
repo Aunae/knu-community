@@ -14,7 +14,7 @@ const MobileSidebar = ({ session, open, handleClose, categories }: Props) => {
   return (
     open && (
       <aside>
-        <section className="grid bg-gray-100 w-64 p-4 h-screen fixed left-0 top-0 z-20">
+        <section className="grid bg-white w-64 p-4 h-screen fixed left-0 top-0 z-20 border border-gray-200">
           {session ? (
             <AuthorizedSidebar categories={categories} handleClose={handleClose} />
           ) : (
