@@ -1,8 +1,9 @@
 'use client';
 import { useState } from 'react';
-import MobileSidebar from './mobile-sidebar/mobile-sidebar';
 import Image from 'next/image';
+import MobileSidebar from './mobile-sidebar/mobile-sidebar';
 import { CategoryWithChildren } from '../../../libs/models/category';
+import { useSession } from 'next-auth/react';
 
 /** Todo: replace to icon */
 const MenuIcon = 'https://img.icons8.com/ios-glyphs/30/null/menu-rounded.png';
@@ -13,9 +14,21 @@ interface Props {
 }
 
 const Header = ({ categories }: Props) => {
+  const { data: session, status } = useSession();
+
   const [openMobileSidebar, setOpenMobileSidebar] = useState(false);
   const handleDrawerOpen = () => setOpenMobileSidebar(true);
   const handleDrawerClose = () => setOpenMobileSidebar(false);
+
+  if (status === 'loading') {
+    return <p>Hang on there...</p>;
+  }
+
+  if (status === 'unauthenticated') {
+    return <div>un auth</div>;
+  }
+
+  console.log(`auth user: `, session?.user);
 
   return (
     <>
@@ -25,7 +38,7 @@ const Header = ({ categories }: Props) => {
         <Image src={SearchIcon} width={50} height={50} alt={'search'} />
       </div>
 
-      <MobileSidebar open={openMobileSidebar} categories={categories} handleClose={handleDrawerClose} />
+      <MobileSidebar session={session!} open={openMobileSidebar} categories={categories} handleClose={handleDrawerClose} />
     </>
   );
 };

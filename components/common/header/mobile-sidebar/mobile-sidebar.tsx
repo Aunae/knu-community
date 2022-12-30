@@ -1,16 +1,16 @@
 import { CategoryWithChildren } from '../../../../libs/models/category';
 import AuthorizedSidebar from './authorized-sidebar';
 import UnAuthorizedSidebar from './un-authorized-sidebar';
+import { Session } from 'next-auth';
 
 interface Props {
   categories: CategoryWithChildren[];
   open: Boolean;
   handleClose: () => void;
+  session: Session;
 }
 
-const MobileSidebar = ({ open, handleClose, categories }: Props) => {
-  const session = false;
-
+const MobileSidebar = ({ session, open, handleClose, categories }: Props) => {
   return (
     open && (
       <aside>
