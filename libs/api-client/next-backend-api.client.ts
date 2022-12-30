@@ -1,6 +1,6 @@
 import { HTTP_METHOD, HTTP_STATUS } from '../constants/http';
 
-const baseURL = '/api-client';
+const baseURL = '/api';
 
 const get = <T>(url: string): Promise<T> => {
   const configs: RequestInit = {
