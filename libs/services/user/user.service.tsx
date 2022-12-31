@@ -1,7 +1,16 @@
 import { prismaClient } from '../../prisma/prisma.client';
-import { Prisma, User } from '@prisma/client';
+import { Prisma, PrismaClient, User } from '@prisma/client';
 import { UsersResponse } from '../../api-interfaces/response/user/user.interface';
 import UserCreateInput = Prisma.UserCreateInput;
+
+export class UserService {
+  constructor(private readonly prismaClient: PrismaClient) {}
+
+  async createUser(createUserDto: UserCreateInput): Promise<User> {
+    const user = await prismaClient.user.create({ data: createUserDto });
+    return user;
+  }
+}
 
 const createUser = async (createUserDto: UserCreateInput): Promise<User> => {
   const user = await prismaClient.user.create({ data: createUserDto });
