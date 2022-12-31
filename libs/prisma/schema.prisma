@@ -19,14 +19,19 @@ model User {
   name      String
   email     String   @unique
   password  String
-  posts     Post[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  posts        Post[]
+  postLikes    PostLike[]
+  comments     Comment[]
+  commentLikes CommentLike[]
 }
 
 model Category {
-  id       String     @id @default(uuid())
-  name     String
+  id   String @id @default(uuid())
+  name String
+
   parentId String?
   parent   Category?  @relation("categories", fields: [parentId], references: [id])
   children Category[] @relation("categories")
@@ -34,13 +39,49 @@ model Category {
 }
 
 model Post {
-  id          String   @id @default(uuid())
-  title       String
-  description String
-  authorId    String
-  author      User     @relation(fields: [authorId], references: [id])
-  categoryId  String
-  category    Category @relation(fields: [categoryId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(uuid())
+  title     String
+  content   String
+  published Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  postLikes  PostLike[]
+  comments   Comment[]
+  authorId   String
+  author     User       @relation(fields: [authorId], references: [id])
+  categoryId String
+  category   Category   @relation(fields: [categoryId], references: [id])
+}
+
+model PostLike {
+  id String @id @default(uuid())
+
+  postId String
+  post   Post   @relation(fields: [postId], references: [id])
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model Comment {
+  id        String  @id @default(uuid())
+  content   String
+  published Boolean
+
+  commentLikes CommentLike[]
+  authorId     String
+  author       User          @relation(fields: [authorId], references: [id])
+  postId       String
+  post         Post          @relation(fields: [postId], references: [id])
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model CommentLike {
+  id String @id @default(uuid())
+
+  commentId String
+  Comment   Comment @relation(fields: [commentId], references: [id])
+  userId    String
+  user      User    @relation(fields: [userId], references: [id])
 }
