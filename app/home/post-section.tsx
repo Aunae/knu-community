@@ -9,7 +9,7 @@ const PostSection = async () => {
         <div key={post.id}>
           <p>{post.title}</p>
           <p>{post.author.name}</p>
-          <p>{post.description}</p>
+          <p>{post.content}</p>
         </div>
       ))}
     </>
