@@ -1,9 +1,9 @@
 'use client';
 import { useState } from 'react';
-import MobileSidebar from './mobile-sidebar/mobile-sidebar';
 import { CategoryWithChildren } from '../../../libs/models/category';
-import { useSession } from 'next-auth/react';
 import { MdMenu as MenuIcon, MdSearch as SearchIcon } from 'react-icons/md';
+import { useSession } from 'next-auth/react';
+import MobileSidebar from './mobile-sidebar/mobile-sidebar';
 
 interface Props {
   categories: CategoryWithChildren[];
@@ -17,14 +17,13 @@ const Header = ({ categories }: Props) => {
   const handleDrawerClose = () => setOpenMobileSidebar(false);
 
   if (status === 'loading') {
-    return <p>Hang on there...</p>;
+    return <p>로딩중...</p>;
   }
 
-  if (status === 'unauthenticated') {
-    return <div>un auth</div>;
-  }
-
-  console.log(`auth user: `, session?.user);
+  // 세션에 유저 정보 없음
+  // if (status === 'unauthenticated') {
+  //   return <div>un auth</div>;
+  // }
 
   return (
     <>
