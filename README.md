@@ -2,7 +2,7 @@
 
 ## Setup
 
-1. <pre>https://github.com/Aunae/knu-community.git</pre>
+1. <pre>git clone https://github.com/Aunae/knu-community.git</pre>
 2. <pre>cd knu-community</pre>
 3. <pre>npm install</pre>
 4. <pre>touch libs/prisma/dev.db</pre>
