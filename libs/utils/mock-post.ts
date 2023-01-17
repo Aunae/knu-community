@@ -26,9 +26,10 @@ export const createMockPost = async () => {
     postService.createPost({
       data: {
         title: 'Mock title',
-        description: 'mock description',
+        content: 'mock description',
+        published: false,
         authorId: user.id,
-        categoryId: children[++categorySequence].id,
+        categoryId: children[++categorySequence]?.id,
       },
     });
   });
