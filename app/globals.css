@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --header-color: rgb(37 99 235 / 1);
+
+  --bg-deactive-color: rgba(0, 0, 0, 0.1);
+}

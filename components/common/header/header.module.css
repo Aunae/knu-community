@@ -1,0 +1,16 @@
+.header {
+  display: flex;
+  position: static;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--header-color);
+  padding: 0.75rem;
+}
+
+.logo {
+  color: white;
+  font-size: 2rem;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: 0.025rem;
+}

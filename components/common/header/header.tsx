@@ -4,6 +4,7 @@ import { CategoryWithChildren } from '../../../libs/models/category';
 import { MdMenu as MenuIcon, MdSearch as SearchIcon } from 'react-icons/md';
 import { useSession } from 'next-auth/react';
 import MobileSidebar from './mobile-sidebar/mobile-sidebar';
+import styles from './header.module.css';
 
 interface Props {
   categories: CategoryWithChildren[];
@@ -27,13 +28,13 @@ const Header = ({ categories }: Props) => {
 
   return (
     <>
-      <div className="flex static justify-between items-center p-6 bg-blue-600 rounded-b-sm shadow-sm">
+      <div className={styles.header}>
         <button className="text-white" onClick={handleDrawerOpen}>
-          <MenuIcon size={50} />
+          <MenuIcon size={25} />
         </button>
-        <h1 className="text-7xl font-extrabold tracking-tight text-white">KNU</h1>
+        <h1 className={styles.logo}>KNU</h1>
         <button className="text-white">
-          <SearchIcon size={50} />
+          <SearchIcon size={25} />
         </button>
       </div>
 
