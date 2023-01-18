@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { getProviders, signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 interface Props {
   providers: Awaited<ReturnType<typeof getProviders>>;
@@ -10,13 +11,20 @@ const LoginForm = ({ providers }: Props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const submitHandler = () => {
+  const submitHandler = (e: any) => {
+    e.preventDefault();
+    signIn('user-credentials', {
+      email,
+      password,
+      redirect: true,
+      callbackUrl: process.env.BASE_URL || 'http://localhost:3000 ',
+    });
     console.log('login');
   };
 
   return (
     <>
-      <form>
+      <form onSubmit={submitHandler}>
         <div className="w-96 p-6 shadow-sm bg-white">
           <div className="flex flex-col">
             <label className="text-gray-700" htmlFor="email">
@@ -45,7 +53,7 @@ const LoginForm = ({ providers }: Props) => {
               required
             />
 
-            <button onClick={submitHandler} type="submit" className="bg-blue-500 w-full text-gray-100 py-2 rounded hover:bg-blue-600 transition-colors">
+            <button type="submit" className="bg-blue-500 w-full text-gray-100 py-2 rounded hover:bg-blue-600 transition-colors">
               로그인
             </button>
           </div>
@@ -57,6 +65,8 @@ const LoginForm = ({ providers }: Props) => {
             <button
               onClick={() =>
                 signIn(provider.id, {
+                  email,
+                  password,
                   callbackUrl: process.env.BASE_URL || 'http://localhost:3000 ',
                 })
               }

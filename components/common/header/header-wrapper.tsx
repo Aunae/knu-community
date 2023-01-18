@@ -6,11 +6,7 @@ interface Props {}
 const HeaderWrapper = async ({}: Props) => {
   const { data: categories } = await getMockCategories();
 
-  return (
-    <>
-      <Header categories={categories} />
-    </>
-  );
+  return <Header categories={categories} />;
 };
 
 export default HeaderWrapper;

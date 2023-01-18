@@ -8,10 +8,10 @@ interface Props {
   categories: CategoryWithChildren[];
   open: Boolean;
   handleClose: () => void;
-  session: Session;
+  session: Session | null;
 }
 
-const MobileSidebar = ({ session, open, handleClose, categories }: Props) => {
+const MobileSidebar = ({ session = null, open, handleClose, categories }: Props) => {
   return (
     <aside className={`${open ? styles.sectionContainer : ''}`}>
       <section className={`${styles.sidebarContainer} ${open ? styles.sidebarContainerOpen : ''}`}>
