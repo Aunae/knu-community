@@ -25,11 +25,6 @@ const Header = ({ categories }: Props) => {
   const handleDrawerOpen = () => setOpenMobileSidebar(true);
   const handleDrawerClose = () => setOpenMobileSidebar(false);
 
-  if (!mounted) return null;
-  if (status === 'loading') {
-    return <p>로딩중...</p>;
-  }
-
   return (
     <>
       <div className={styles.header}>
