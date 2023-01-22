@@ -15,7 +15,7 @@ const nextConfig = {
     serverComponentsExternalPackages: ['@prisma/client'],
   },
   images: {
-    domains: ['img.icons8.com'],
+    domains: ['img.icons8.com', `images.unsplash.com`],
   },
 };
 
