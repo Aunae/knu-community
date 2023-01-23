@@ -1,7 +1,8 @@
 import PostSection from './post-section';
-import { ReactNode } from 'react';
+import { ReactNode, Suspense } from 'react';
 import { Session } from 'next-auth';
 import PostFloatingButton from '../../components/home/post-floating-button';
+import styles from './post-page.module.scss';
 
 interface Props {
   children: ReactNode;
@@ -10,12 +11,14 @@ interface Props {
 
 const HomePage = async () => {
   return (
-    <div>
-      <div>home page</div>
-      {/* @ts-expect-error Server Component */}
-      <PostSection />
-      <PostFloatingButton />
-    </div>
+    <Suspense>
+      <div className={styles.page}>
+        <div>home page</div>
+        {/* @ts-expect-error Server Component */}
+        <PostSection />
+        <PostFloatingButton />
+      </div>
+    </Suspense>
   );
 };
 
