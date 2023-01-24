@@ -1,0 +1,27 @@
+.container {
+  width: 100%;
+  height: 50rem;
+  border: 1px solid black;
+  .title {
+    display: block;
+    width: 100%;
+    min-height: 40px;
+    padding: 11px 12px 10px;
+    border: 1px solid #ebecef;
+    box-sizing: border-box;
+    overflow: hidden;
+    resize: none;
+    word-break: break-all;
+    font-size: 15px;
+    letter-spacing: -.23px;
+    line-height: 17px;
+    outline: none;
+
+    font-weight: 400;
+    height: 40px;
+  }
+  &>button {
+    border: 1px solid black;
+    background-color: #ebecef;
+  }
+}
