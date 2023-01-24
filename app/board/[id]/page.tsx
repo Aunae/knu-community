@@ -1,13 +1,15 @@
+// 'use client';
 import { ReactNode } from 'react';
 import CommentFloatingButton from '../../../components/board/comment-floating-button';
 import { MdAccountCircle as MockIcon, MdComment as CommentIcon, MdMoreVert as CommentOptionIcon, MdThumbUp as LikeIcon } from 'react-icons/md';
+import axios from 'axios';
 
 interface Props {
   children: ReactNode;
   params: { id: string };
 }
 
-const getMockBoard = async (id: string) => {
+const getMockBoard = () => {
   const post: any = {
     id: '1234-1234-1234-1234',
     title: '자게글1 제목',
@@ -24,8 +26,18 @@ const getMockBoard = async (id: string) => {
   return post;
 };
 
+const getPost = async (id: string) => {
+  const url = process.env.BASE_URL || 'http://localhost:3000';
+  const queryFn = `${url}/api/post/${id}`;
+  // const data = await axios.get(queryFn).then((res) => res.data);
+  const data = await (await fetch(queryFn)).json();
+  if (data.status === 200) return data.data;
+  else return data;
+};
+
+// TODO: change to SSR
 const BoardPage = async ({ params, children }: Props) => {
-  const post = await getMockBoard(params.id);
+  const post = await getPost(params.id);
 
   return (
     <main>
@@ -33,15 +45,13 @@ const BoardPage = async ({ params, children }: Props) => {
         {/*게시글 헤더*/}
         <section className="flex flex-col border-b justify-center bg-amber-200">
           <div className="flex items-center">
-            <h3 className="text-xl mr-2">{post.category.name}</h3>
+            <h3 className="text-xl mr-2">{post.category?.name}</h3>
             <h2 className="text-5xl ml-2">{post.title}</h2>
           </div>
         </section>
 
         {/*게시글 본문*/}
-        <section className="bg-gray-200 mb-10">
-          <p className="text-base">{post.content}</p>
-        </section>
+        <section className="bg-gray-200 mb-10" dangerouslySetInnerHTML={{ __html: post.content }} />
 
         {/*댓글창*/}
         <section className="flex w-screen bg-red-200">
