@@ -1,4 +1,4 @@
-import PostComponent from '../../components/board/post';
+import PostComponent from '../../components/board/post-item';
 import { getMockPosts } from '../../libs/utils/mock-post';
 
 const PostSection = async () => {
