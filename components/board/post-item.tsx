@@ -1,7 +1,7 @@
 import { Category, Post, User } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
-import styles from './post.module.scss';
+import styles from './post-item.module.scss';
 
 const imageSrc = `https://images.unsplash.com/photo-1674354419830-fe4ac561f651?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80`;
 
