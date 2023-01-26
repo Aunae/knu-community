@@ -1,44 +1,41 @@
 'use client';
 import { useState } from 'react';
-import MobileSidebar from './mobile-sidebar/mobile-sidebar';
 import { CategoryWithChildren } from '../../../libs/models/category';
-import { useSession } from 'next-auth/react';
 import { MdMenu as MenuIcon, MdSearch as SearchIcon } from 'react-icons/md';
+import { useSession } from 'next-auth/react';
+import MobileSidebar from './mobile-sidebar/mobile-sidebar';
+import styles from './header.module.css';
+import Link from 'next/link';
 
 interface Props {
   categories: CategoryWithChildren[];
+  // session: Session | null;
+  // status: 'authenticated' | 'loading' | 'unauthenticated';
 }
 
 const Header = ({ categories }: Props) => {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   const [openMobileSidebar, setOpenMobileSidebar] = useState(false);
+
   const handleDrawerOpen = () => setOpenMobileSidebar(true);
   const handleDrawerClose = () => setOpenMobileSidebar(false);
 
-  if (status === 'loading') {
-    return <p>Hang on there...</p>;
-  }
-
-  if (status === 'unauthenticated') {
-    return <div>un auth</div>;
-  }
-
-  console.log(`auth user: `, session?.user);
-
   return (
     <>
-      <div className="flex static justify-between items-center p-6 bg-blue-600 rounded-b-sm shadow-sm">
+      <div className={styles.header}>
         <button className="text-white" onClick={handleDrawerOpen}>
-          <MenuIcon size={50} />
+          <MenuIcon size={25} />
         </button>
-        <h1 className="text-7xl font-extrabold tracking-tight text-white">KNU</h1>
+        <Link href="/" className={styles.logo}>
+          KNU
+        </Link>
         <button className="text-white">
-          <SearchIcon size={50} />
+          <SearchIcon size={25} />
         </button>
       </div>
 
-      <MobileSidebar session={session!} open={openMobileSidebar} categories={categories} handleClose={handleDrawerClose} />
+      <MobileSidebar session={session} open={openMobileSidebar} categories={categories} handleClose={handleDrawerClose} />
     </>
   );
 };

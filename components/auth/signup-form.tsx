@@ -21,6 +21,7 @@ const SignupForm = () => {
     }
 
     const response = await nextBackendClient.post('users', { name, email, password });
+    console.log(response);
     router.push('/');
   };
 

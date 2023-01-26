@@ -2,6 +2,7 @@ import { prismaClient } from '../../prisma/prisma.client';
 import { Prisma, PrismaClient, User } from '@prisma/client';
 import { UsersResponse } from '../../api-interfaces/response/user/user.interface';
 import UserCreateInput = Prisma.UserCreateInput;
+import { verifyPassword } from '../../../pages/api/users';
 
 export class UserService {
   constructor(private readonly prismaClient: PrismaClient) {}
@@ -49,9 +50,18 @@ const getUsers = async (): Promise<UsersResponse> => {
   return { data: users, message: 'success', status: 200 };
 };
 
+const validUser = async (email: string, password: string): Promise<User | null> => {
+  const user = await getUser(email);
+  if (!user) return null;
+  const valid = await verifyPassword(password, user.password);
+  if (valid) return user;
+  else return null;
+};
+
 export const userService = {
   createUser,
   getUser,
   getUserById,
   getUsers,
+  validUser,
 };

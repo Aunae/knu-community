@@ -1,0 +1,36 @@
+.sectionContainer {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+}
+
+.sidebarContainer {
+  position: fixed;
+  display: grid;
+  background-color: white;
+  width: 16rem;
+  padding: 1rem;
+  height: 100vh;
+  left: -16rem;
+  top: 0;
+  z-index: 20;
+  border: 1px;
+  border-color: rgb(229 231 235 / 1);
+  transition: 0.2s all ease;
+}
+
+.sidebarContainerOpen {
+  left: 0;
+}
+
+.sectionClose {
+  height: 100vh;
+  background-color: var(--bg-deactive-color);
+}
+
+.displayNone {
+  display: none;
+}

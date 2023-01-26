@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, Suspense } from 'react';
 import HeaderWrapper from '../../components/common/header/header-wrapper';
 
 interface Props {
@@ -8,8 +8,10 @@ interface Props {
 const HomeLayout = ({ children }: Props) => {
   return (
     <>
-      {/* @ts-expect-error Server Component */}
-      <HeaderWrapper />
+      <Suspense>
+        {/* @ts-expect-error Server Component */}
+        <HeaderWrapper />
+      </Suspense>
       {children}
     </>
   );
