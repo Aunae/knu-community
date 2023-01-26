@@ -1,9 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
 
 :root {
   --header-color: rgb(37 99 235 / 1);
-
   --bg-deactive-color: rgba(0, 0, 0, 0.1);
+}
+
+* {
+  font-family: 'Noto Sans KR', sans-serif;
+  letter-spacing: 0.015rem;
 }
