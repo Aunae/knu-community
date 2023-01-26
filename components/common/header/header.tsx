@@ -1,11 +1,11 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { CategoryWithChildren } from '../../../libs/models/category';
 import { MdMenu as MenuIcon, MdSearch as SearchIcon } from 'react-icons/md';
 import { useSession } from 'next-auth/react';
 import MobileSidebar from './mobile-sidebar/mobile-sidebar';
 import styles from './header.module.css';
-import { Session } from 'next-auth';
+import Link from 'next/link';
 
 interface Props {
   categories: CategoryWithChildren[];
@@ -14,14 +14,10 @@ interface Props {
 }
 
 const Header = ({ categories }: Props) => {
-  const [mounted, setMounted] = useState(false);
-  const { data: session, status } = useSession();
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const { data: session } = useSession();
 
   const [openMobileSidebar, setOpenMobileSidebar] = useState(false);
+
   const handleDrawerOpen = () => setOpenMobileSidebar(true);
   const handleDrawerClose = () => setOpenMobileSidebar(false);
 
@@ -31,7 +27,9 @@ const Header = ({ categories }: Props) => {
         <button className="text-white" onClick={handleDrawerOpen}>
           <MenuIcon size={25} />
         </button>
-        <h1 className={styles.logo}>KNU</h1>
+        <Link href="/" className={styles.logo}>
+          KNU
+        </Link>
         <button className="text-white">
           <SearchIcon size={25} />
         </button>
