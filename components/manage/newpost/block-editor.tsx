@@ -7,7 +7,13 @@ import FormatItalicIcon from '@mui/icons-material/FormatItalic';
 import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined';
 import StrikethroughSIcon from '@mui/icons-material/StrikethroughS';
 import ImageIcon from '@mui/icons-material/Image';
-import React, { useEffect } from 'react';
+import FormatColorTextIcon from '@mui/icons-material/FormatColorText';
+import FontDownloadIcon from '@mui/icons-material/FontDownload';
+import FormatAlignLeftIcon from '@mui/icons-material/FormatAlignLeft';
+import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
+import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
+import React, { useEffect, useState } from 'react';
+import ColorLens from '../../common/color/color-picker';
 
 enum ButtonStyle {
   bold = 'bold',
@@ -26,14 +32,19 @@ const BlockEditor = ({}: Props) => {
   const focusEditor = () => {
     document.getElementById('editor')?.focus({ preventScroll: true });
   };
-  const setStyle = (aCommandName: string) => {
-    document.execCommand(aCommandName);
+  // TODO: fore, back color picker
+  const [foreColorPicker, setForeColorPicker] = useState(false);
+  const [backColorPicker, setBackColorPicker] = useState(false);
+  const setStyle = (aCommandName: string, showUI: boolean | undefined = undefined, value: string | undefined = undefined) => {
+    document.execCommand(aCommandName, showUI, value);
+    // editor에 focus를 둡니다.
     focusEditor();
+    // 글의 상태를 옵션 UI에 업데이트합니다.
     checkStyle();
   };
 
-  const onClickEditButton = (aCommandName: string) => {
-    setStyle(aCommandName);
+  const onClickEditButton = (aCommandName: string, showUI: boolean | undefined = undefined, value: string | undefined = undefined) => {
+    setStyle(aCommandName, showUI, value);
   };
 
   const checkStyle = () => {
@@ -51,6 +62,27 @@ const BlockEditor = ({}: Props) => {
         element?.classList.remove(`${styles.active}`);
       }
     });
+    // foreColor 코드
+    var node: any = window.getSelection()?.focusNode?.parentNode;
+    while (node.id !== 'editor' && node?.attributes?.color?.value === undefined) {
+      node = node.parentNode;
+    }
+
+    const selectionAreaForeColor = node?.attributes?.color?.value ?? '#000000';
+    const foreColorElement = document.getElementById(`btn_foreColor`);
+    if (foreColorElement) foreColorElement.style['color'] = selectionAreaForeColor;
+
+    // hiliteColor 코드
+    // 가장 가까운 부모의 background-color attribute를 얻는 코드
+    var node: any = window.getSelection()?.focusNode?.parentNode;
+    while (node.id !== 'editor' && node?.attributes?.style?.value === undefined) {
+      node = node.parentNode;
+    }
+    // console.log(node?.attributes?.style?.value);
+
+    const selectionAreaBackColor = node?.attributes?.style?.value?.substr(18)?.replace(';', '') ?? '#000000';
+    const backColorElement = document.getElementById(`btn_hiliteColor`);
+    if (backColorElement) backColorElement.style['color'] = selectionAreaBackColor;
   };
 
   const onClickImageButton = () => {
@@ -75,6 +107,47 @@ const BlockEditor = ({}: Props) => {
 
   return (
     <div className={styles.container}>
+      <div className={styles.menu}>
+        <button
+          id="btn_foreColor"
+          className={styles.btn_foreColor}
+          onFocus={() => setForeColorPicker(true)}
+          // onClick={() => onClickEditButton('foreColor', false, '#ff0000')} hiliteColor
+        >
+          <FormatColorTextIcon />
+          <span className={styles.tooltiptext}>색상</span>
+          <ColorLens
+            setColor={(color: string) => {
+              onClickEditButton('foreColor', false, color);
+            }}
+            onBlur={() => setForeColorPicker(false)}
+            active={foreColorPicker}
+          />
+        </button>
+        <button id="btn_hiliteColor" className={styles.btn_bold} onFocus={() => setBackColorPicker(true)} onClick={() => onClickEditButton('')}>
+          <FontDownloadIcon />
+          <span className={styles.tooltiptext}>폰트배경색상</span>
+          <ColorLens
+            setColor={(color: string) => {
+              onClickEditButton('hiliteColor', false, color);
+            }}
+            onBlur={() => setBackColorPicker(false)}
+            active={backColorPicker}
+          />
+        </button>
+        <button id="btn_a" className={styles.btn_bold} onClick={() => onClickEditButton('')}>
+          <FormatAlignLeftIcon />
+          <span className={styles.tooltiptext}>좌측 정렬</span>
+        </button>
+        <button id="btn_2r" className={styles.btn_bold} onClick={() => onClickEditButton('')}>
+          <FormatAlignCenterIcon />
+          <span className={styles.tooltiptext}>중앙 정렬</span>
+        </button>
+        <button id="btn_col3r" className={styles.btn_bold} onClick={() => onClickEditButton('')}>
+          <FormatAlignRightIcon />
+          <span className={styles.tooltiptext}>우측 정렬</span>
+        </button>
+      </div>
       <div className={styles.menu}>
         <button id="btn_bold" className={styles.btn_bold} onClick={() => onClickEditButton('bold')}>
           <FormatBoldIcon />
@@ -126,7 +199,9 @@ const BlockEditor = ({}: Props) => {
         onKeyDown={onKeyDown}
         onKeyUp={checkStyle}
         onMouseDown={checkStyle}
-        onClick={checkStyle}
+        onClick={() => {
+          checkStyle();
+        }}
       />
     </div>
   );

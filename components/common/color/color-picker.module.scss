@@ -1,0 +1,22 @@
+.container {
+    display: flex;
+    position: absolute;
+    z-index: 10;
+    width: 17rem;
+    background-color: white;
+}
+
+.list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.item {
+    button {
+        width: 1rem;
+        height: 1rem;
+    }
+    span {
+        display: none;
+    }
+}

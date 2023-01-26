@@ -15,7 +15,6 @@
       .tooltiptext {
         visibility: hidden;
         width: 100px;
-        height: 1rem;
         font-size: 0.5rem;
         background-color: rgba(0, 0, 0, 0);
         color: #fff;
@@ -30,7 +29,7 @@
         white-space: nowrap;
         animation-fill-mode: forwards;
         animation-iteration-count: 1;
-        animation-duration: 0.8s;
+        animation-duration: 1s;
       }
     } 
     button.active {
@@ -47,6 +46,10 @@
       max-width: 100%;
     }
   }
+}
+
+.btn_foreColor {
+  position: relative;
 }
 
 @keyframes tooltip {
