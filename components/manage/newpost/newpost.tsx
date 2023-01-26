@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import PostController from '../../../pages/api/post';
+import BlockEditor from './block-editor';
 import Editor from './editor';
 import styles from './newpost.module.scss';
 
@@ -55,7 +56,7 @@ const NewPost = () => {
             }
           }}
         ></textarea>
-        <Editor />
+        {false ? <Editor /> : <BlockEditor />}
         <button disabled={submitDisabled} onClick={onClick}>
           등록
         </button>
