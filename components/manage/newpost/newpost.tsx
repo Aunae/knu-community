@@ -11,7 +11,9 @@ const NewPost = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
   const [title, setTitle] = useState<string>('');
+  const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
   const onClick = () => {
+    setSubmitDisabled(true);
     const element = document.getElementById('editor');
     if (element?.innerHTML) localStorage.setItem('temp', element.innerHTML);
     // console.log('inner:', element?.innerHTML);
@@ -28,6 +30,10 @@ const NewPost = () => {
           })
           .then((res) => res.data);
         if (data.status === 200) router.push('/home');
+        else {
+          alert('등록에 실패했습니다. 다시 시도해주세요.');
+          setSubmitDisabled(false);
+        }
       };
       send();
     }
@@ -50,7 +56,9 @@ const NewPost = () => {
           }}
         ></textarea>
         <Editor />
-        <button onClick={onClick}>등록</button>
+        <button disabled={submitDisabled} onClick={onClick}>
+          등록
+        </button>
       </div>
     );
   return <div>뭔가 잘못 되었습니다...</div>;
