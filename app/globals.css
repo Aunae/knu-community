@@ -12,3 +12,15 @@
   font-family: 'Noto Sans KR', sans-serif;
   letter-spacing: 0.015rem;
 }
+
+ol {
+  list-style-type: decimal;
+}
+
+ul {
+  list-style-type: disc;
+}
+
+ol, ul {
+  margin-left: 2rem;
+}
