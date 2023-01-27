@@ -64,8 +64,9 @@ const BlockEditor = ({}: Props) => {
     });
     // foreColor 코드
     var node: any = window.getSelection()?.focusNode?.parentNode;
-    while (node.id !== 'editor' && node?.attributes?.color?.value === undefined) {
-      node = node.parentNode;
+    while (node?.id !== 'editor' && node?.attributes?.color?.value === undefined) {
+      node = node?.parentNode;
+      if (node === undefined || node === null) break;
     }
 
     const selectionAreaForeColor = node?.attributes?.color?.value ?? '#000000';
@@ -75,10 +76,11 @@ const BlockEditor = ({}: Props) => {
     // hiliteColor 코드
     // 가장 가까운 부모의 background-color attribute를 얻는 코드
     var node: any = window.getSelection()?.focusNode?.parentNode;
-    while (node.id !== 'editor' && node?.attributes?.style?.value === undefined) {
-      node = node.parentNode;
+    while (node?.id !== 'editor' && node?.attributes?.style?.value === undefined) {
+      node = node?.parentNode;
+      if (node === undefined || node === null) break;
     }
-    // console.log(node?.attributes?.style?.value);
+    console.log(node?.attributes?.style?.value);
 
     const selectionAreaBackColor = node?.attributes?.style?.value?.substr(18)?.replace(';', '') ?? '#000000';
     const backColorElement = document.getElementById(`btn_hiliteColor`);
