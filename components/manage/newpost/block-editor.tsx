@@ -22,12 +22,17 @@ enum ButtonStyle {
   strikeThrough = 'strikeThrough',
   insertOrderedList = 'insertOrderedList',
   insertUnorderedLis = 'insertUnorderedList',
+  justifyLeft = 'justifyLeft',
+  justifyCenter = 'justifyCenter',
+  justifyRight = 'justifyRight',
 }
+
+const defaultTagSeparator = 'div';
 
 type Props = {};
 const BlockEditor = ({}: Props) => {
   useEffect(() => {
-    document.execCommand('defaultParagraphSeparator', false, 'p');
+    document.execCommand('defaultParagraphSeparator', false, defaultTagSeparator);
   }, []);
   const focusEditor = () => {
     document.getElementById('editor')?.focus({ preventScroll: true });
@@ -55,7 +60,7 @@ const BlockEditor = ({}: Props) => {
       // console.log(editor.childNodes);
       if (editor.childNodes[0]?.nodeName === '#text') {
         const str = editor.childNodes[0].nodeValue;
-        const p = document.createElement('p');
+        const p = document.createElement(defaultTagSeparator);
         if (str) p.append(str);
         editor.appendChild(p);
         editor.childNodes[0].remove();
@@ -75,6 +80,12 @@ const BlockEditor = ({}: Props) => {
           range.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
           range.select(); //Select the range (make it the visible selection
         }
+      }
+
+      const ps = editor.getElementsByTagName(defaultTagSeparator);
+      // console.log(ps);
+      for (let i = 0; i < ps.length; i++) {
+        ps[i].setAttribute('draggable', 'true');
       }
     }
   };
@@ -163,15 +174,15 @@ const BlockEditor = ({}: Props) => {
             active={backColorPicker}
           />
         </button>
-        <button id="btn_a" className={styles.btn_bold} onClick={() => onClickEditButton('')}>
+        <button id="btn_justifyLeft" className={styles.btn_bold} onClick={() => onClickEditButton('justifyLeft')}>
           <FormatAlignLeftIcon />
           <span className={styles.tooltiptext}>좌측 정렬</span>
         </button>
-        <button id="btn_2r" className={styles.btn_bold} onClick={() => onClickEditButton('')}>
+        <button id="btn_justifyCenter" className={styles.btn_bold} onClick={() => onClickEditButton('justifyCenter')}>
           <FormatAlignCenterIcon />
           <span className={styles.tooltiptext}>중앙 정렬</span>
         </button>
-        <button id="btn_col3r" className={styles.btn_bold} onClick={() => onClickEditButton('')}>
+        <button id="btn_justifyRight" className={styles.btn_bold} onClick={() => onClickEditButton('justifyRight')}>
           <FormatAlignRightIcon />
           <span className={styles.tooltiptext}>우측 정렬</span>
         </button>
