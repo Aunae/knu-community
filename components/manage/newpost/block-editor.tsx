@@ -49,6 +49,34 @@ const BlockEditor = ({}: Props) => {
 
   const checkStyle = () => {
     toggleCurrentStyles();
+    // contentEditable의 첫 번째 child를 수정합니다.
+    const editor = document.getElementById('editor');
+    if (editor) {
+      // console.log(editor.childNodes);
+      if (editor.childNodes[0]?.nodeName === '#text') {
+        const str = editor.childNodes[0].nodeValue;
+        const p = document.createElement('p');
+        if (str) p.append(str);
+        editor.appendChild(p);
+        editor.childNodes[0].remove();
+        var range, selection;
+        if (document.createRange) {
+          //Firefox, Chrome, Opera, Safari, IE 9+
+          range = document.createRange(); //Create a range (a range is a like the selection but invisible)
+          range.selectNodeContents(editor); //Select the entire contents of the element with the range
+          range?.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
+          selection = window.getSelection(); //get the selection object (allows you to change selection)
+          selection?.removeAllRanges(); //remove any selections already made
+          selection?.addRange(range); //make the range you have just created the visible selection
+        } else if ((document as any).selection) {
+          //IE 8 and lower
+          range = (document.body as any).createTextRange(); //Create a range (a range is a like the selection but invisible)
+          range.moveToElementText(editor); //Select the entire contents of the element with the range
+          range.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
+          range.select(); //Select the range (make it the visible selection
+        }
+      }
+    }
   };
 
   // 모든 스타일을 가져와서 버튼을 활성화/비활성화 합니다.
@@ -80,7 +108,6 @@ const BlockEditor = ({}: Props) => {
       node = node?.parentNode;
       if (node === undefined || node === null) break;
     }
-    console.log(node?.attributes?.style?.value);
 
     const selectionAreaBackColor = node?.attributes?.style?.value?.substr(18)?.replace(';', '') ?? '#000000';
     const backColorElement = document.getElementById(`btn_hiliteColor`);
@@ -103,7 +130,6 @@ const BlockEditor = ({}: Props) => {
   };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    console.log(e);
     checkStyle();
   };
 
