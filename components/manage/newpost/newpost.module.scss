@@ -1,7 +1,7 @@
 .container {
   width: 100%;
   height: 50rem;
-  border: 1px solid black;
+  border: 1px solid var(--text);
   .title {
     display: block;
     width: 100%;
@@ -21,7 +21,7 @@
     height: 40px;
   }
   &>button {
-    border: 1px solid black;
-    background-color: #ebecef;
+    border: 1px solid var(--text);
+    background-color: var(--black-alpha-5);
   }
 }

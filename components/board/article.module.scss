@@ -9,7 +9,7 @@
 }
 
 .category {
-  color: #76c6d1;
+  color: var(--primary-link);
   font-weight: 800;
 }
 
@@ -26,13 +26,13 @@
     padding: 0.25rem 0 0.5rem;
     span {
       font-size: 1rem;
-      color: #9e9e9e;
+      color: var(--black-alpha-3);
       &::after{
         content: '';
         display: inline-block;
         width: 1px;
         height: 9px;
-        background-color: rgb(204, 204, 204);
+        background-color: var(--black-alpha-4);
         margin: 1px 9px;
       }
       &:last-child::after {
@@ -45,7 +45,7 @@
 .line {
   width: 100%;
   height: 1px;
-  background-color: rgb(204, 204, 204);
+  background-color:  var(--black-alpha-3);
   margin: 1rem 0;
 }
 

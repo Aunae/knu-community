@@ -4,7 +4,7 @@
       position: relative;
       border: none;
       border-radius: 2px;
-      background-color: #ffffff;
+      background-color: var(--bgcolor);
       padding: 1px 8px;
       margin: 2px;
       font-size: 1rem;
@@ -17,7 +17,7 @@
         width: 100px;
         height: 1rem;
         font-size: 0.5rem;
-        background-color: rgba(0, 0, 0, 0);
+        background-color: var(--bgcolor);
         color: #fff;
         text-align: center;
         border-radius: 6px;
@@ -34,14 +34,14 @@
       }
     } 
     button.active {
-     color: rgb(0, 195, 255);
+     color: var(--primary-active);
     }
    }
   .editor {
     padding: 1rem 1.5rem;
     height: 40rem;
     overflow-y: scroll;
-    border: 1px solid #D6D6D6;
+    border: 1px solid var(--black-alpha-3);
     border-radius: 0.25rem;
     img {
       max-width: 100%;
@@ -58,10 +58,10 @@
   }
   80% {
     visibility: visible;
-    background-color: rgba(0, 0, 0, 0);
+    background-color: var(--bgcolor);
   }
   100% {
     visibility: visible;
-    background-color: #555;
+    background-color: var(--balck-alpha-2);
   }
 }

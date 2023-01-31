@@ -14,6 +14,7 @@ import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
 import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
 import React, { useEffect, useState } from 'react';
 import ColorLens from '../../common/color/color-picker';
+import { style } from '@mui/system';
 
 enum ButtonStyle {
   bold = 'bold',
@@ -233,7 +234,7 @@ const BlockEditor = ({}: Props) => {
       <div
         id="editor"
         className={styles.editor}
-        contentEditable
+        contentEditable={true}
         onChange={(e) => console.log(e)}
         onKeyDown={onKeyDown}
         onKeyUp={checkStyle}
@@ -241,7 +242,9 @@ const BlockEditor = ({}: Props) => {
         onClick={() => {
           checkStyle();
         }}
-      />
+      >
+        <div className={styles.block} contentEditable={true}></div>
+      </div>
     </div>
   );
 };

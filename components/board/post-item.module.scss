@@ -1,7 +1,7 @@
 .container {
   padding: 0.5rem 0;
   width: 32rem;
-  border-bottom: 1px solid #efefef;
+  border-bottom: 1px solid var(--black-alpha-5);
   display: flex;
   justify-content: flex-start;
   font-weight: bold;
@@ -24,7 +24,7 @@
     padding: 1px 0;
     span {
       font-size: 0.75rem;
-      color: #888888;
+      color: var(--black-alpha-2);
       
       &::after {
         content: '';
