@@ -6,6 +6,24 @@
 :root {
   --header-color: rgb(37 99 235 / 1);
   --bg-deactive-color: rgba(0, 0, 0, 0.1);
+
+  /* Primary Color Set */
+  --primary-1: #4579FF;
+  --primary-2: #8CACFF;
+  --primary-3: #B1C7FF;
+  --primary-text: #FFFFFF;
+
+  /* Secondary Color Set */
+  --secondary-1: #45FFB1;
+  --secondary-2: #79FFC7;
+  --secondary-3: #B9FFE2;
+  --secondary-4: #D6FFC8;
+
+  /* Blacks Color Set (with Alpha) */
+  --black-color-1: #000000ff;
+  --black-color-1: #0000008a;
+  --black-color-1: #0000003d;
+  --black-color-1: #0000003d; 
 }
 
 * {
