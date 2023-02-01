@@ -5,17 +5,15 @@ import PostFloatingButton from '../../components/home/post-floating-button';
 import styles from './post-page.module.scss';
 
 interface Props {
-  children: ReactNode;
-  session: Session;
+  params?: {};
 }
 
-const HomePage = async () => {
+const HomePage = async (props: Props) => {
   return (
     <Suspense>
       <div className={styles.page}>
-        <div>home page</div>
         {/* @ts-expect-error Server Component */}
-        <PostSection />
+        <PostSection {...props} />
         <PostFloatingButton />
       </div>
     </Suspense>

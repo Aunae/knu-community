@@ -1,9 +1,9 @@
 // 'use client';
 import { ReactNode } from 'react';
-import CommentFloatingButton from '../../../components/board/comment-floating-button';
+import CommentFloatingButton from '../../../components/post/comment-floating-button';
 import { MdAccountCircle as MockIcon, MdComment as CommentIcon, MdMoreVert as CommentOptionIcon, MdThumbUp as LikeIcon } from 'react-icons/md';
 import axios from 'axios';
-import Article from '../../../components/board/article';
+import Article from '../../../components/post/article';
 
 interface Props {
   children: ReactNode;
