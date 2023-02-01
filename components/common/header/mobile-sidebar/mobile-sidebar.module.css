@@ -18,7 +18,7 @@
   top: 0;
   z-index: 20;
   border: 1px;
-  border-color: rgb(229 231 235 / 1);
+  border-color: var(--black-alpha-4);
   transition: 0.2s all ease;
 }
 

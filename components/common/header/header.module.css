@@ -3,7 +3,7 @@
   position: static;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--header-color);
+  background-color: var(--primary-1);
   padding: 0.75rem;
 }
 

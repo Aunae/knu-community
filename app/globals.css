@@ -6,9 +6,46 @@
 :root {
   --header-color: rgb(37 99 235 / 1);
   --bg-deactive-color: rgba(0, 0, 0, 0.1);
+  /** Color System **/
+  /* Primary Color Set */
+  --primary-1: #4579FF;
+  --primary-2: #8CACFF;
+  --primary-3: #B1C7FF;
+  --primary-text: #FFFFFF;
+  --primary-link: #76C6D1;
+  --primary-active: #00c3ff;
+
+  /* Secondary Color Set */
+  --secondary-1: #45FFB1;
+  --secondary-2: #79FFC7;
+  --secondary-3: #B9FFE2;
+  --secondary-4: #D6FFC8;
+
+  /* Blacks Color Set (with Alpha) */
+  --black-alpha-1: #000000ff;
+  --black-alpha-2: #0000008a;
+  --black-alpha-3: #00000057;
+  --black-alpha-4: #0000003d;
+  --black-alpha-5: #0000000a; 
+
+  /* Background Color Set */
+  --bgcolor: #FFFFFF;
+  --text: #000000;
 }
 
 * {
   font-family: 'Noto Sans KR', sans-serif;
   letter-spacing: 0.015rem;
+}
+
+ol {
+  list-style-type: decimal;
+}
+
+ul {
+  list-style-type: disc;
+}
+
+ol, ul {
+  margin-left: 2rem;
 }

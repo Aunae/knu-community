@@ -27,18 +27,23 @@ const post = <T>(url: string, data?: any): Promise<T> => {
 
 const handleResponse = (response: Response) => {
   return response.text().then((text) => {
-    const data = text && JSON.parse(text);
+    // TODO: 잘못된 json형식일 때 예외 처리
+    try {
+      const data = text && JSON.parse(text);
 
-    if (!response.ok) {
-      if ([HTTP_STATUS.UNAUTHORIZED, HTTP_STATUS.FORBIDDEN].includes(response.status)) {
-        // auto logout if 401 Unauthorized or 403 Forbidden response returned from api-client
+      if (!response.ok) {
+        if ([HTTP_STATUS.UNAUTHORIZED, HTTP_STATUS.FORBIDDEN].includes(response.status)) {
+          // auto logout if 401 Unauthorized or 403 Forbidden response returned from api-client
+        }
+
+        const error = (data && data.message) || response.statusText;
+        return Promise.reject(error);
       }
 
-      const error = (data && data.message) || response.statusText;
-      return Promise.reject(error);
+      return data;
+    } catch {
+      return null;
     }
-
-    return data;
   });
 };
 

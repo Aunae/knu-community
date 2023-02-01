@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Accordion from './accordion';
 import { CategoryWithChildren } from '../../../../libs/models/category';
+import { signOut } from 'next-auth/react';
 
 interface Props {
   categories: CategoryWithChildren[];
@@ -14,7 +15,14 @@ const AuthorizedSidebar = ({ handleClose, categories }: Props) => {
         <Link href="/profile" onClick={handleClose} className="border-2 text-gray-800 hover:text-blue-300">
           마이페이지
         </Link>
-        <Link href="/logout" onClick={handleClose} className="border-2 text-gray-800 hover:text-blue-300">
+        <Link
+          href="/home"
+          onClick={() => {
+            handleClose();
+            signOut();
+          }}
+          className="border-2 text-gray-800 hover:text-blue-300"
+        >
           로그아웃
         </Link>
       </div>
