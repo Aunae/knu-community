@@ -36,9 +36,12 @@ const getPost = async (id: string) => {
   return { data: post, message: 'success', status: HTTP_STATUS.OK };
 };
 
-export const getPosts = async () => {
+export const getPosts = async (skip?: number, take: number = 20) => {
+  console.log(`${skip}, ${take}`);
   const posts = await prismaClient.post.findMany({
     include: { author: true, category: true },
+    skip,
+    take,
   });
   return { data: posts, message: 'success', status: HTTP_STATUS.OK };
 };

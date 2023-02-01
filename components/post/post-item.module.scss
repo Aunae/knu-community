@@ -1,0 +1,41 @@
+.container {
+  max-width: 900px;
+  width: 100%;
+  border-bottom: 1px solid var(--black-alpha-4);
+  * {
+    font-size: 14px;
+  }
+
+  &>div {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    padding: 0px 8px;
+    &>* {
+      padding: 8px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+  &:hover {
+    background-color: var(--black-alpha-5);
+  }
+}
+
+.cate {
+  width: 140px;
+}
+
+.title {
+  flex: auto;
+}
+
+
+.time {
+  width: 100px;
+}
+
+.view {
+  width: 70px;
+}

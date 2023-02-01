@@ -1,0 +1,15 @@
+.container {
+    display: flex;
+    * {
+        color: var(--black-alpha-3);
+    }
+    &>div>* {
+        font-weight: 600;
+        padding: 4px;
+        cursor: pointer;
+    }
+    .current_number {
+        font-weight: 800;
+        color: var(--black-alpha-1);
+    }
+}
