@@ -40,10 +40,12 @@ export const getPosts = async (skip?: number, take: number = 20) => {
   console.log(`${skip}, ${take}`);
   const posts = await prismaClient.post.findMany({
     include: { author: true, category: true },
+    orderBy: { createdAt: 'desc' },
     skip,
     take,
   });
-  return { data: posts, message: 'success', status: HTTP_STATUS.OK };
+  const count = await prismaClient.post.count();
+  return { data: { posts, count }, message: 'success', status: HTTP_STATUS.OK };
 };
 
 export const postService = {
