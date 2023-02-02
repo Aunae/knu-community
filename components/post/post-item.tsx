@@ -10,10 +10,6 @@ type Props = {
 };
 const PostComponent = ({ post }: Props) => {
   const date = new Date(post.createdAt).toLocaleDateString();
-  /**
-   * FIXME: 이상한 Warning 메시지 발견: Warning: Only plain objects can be passed to Client Components from Server Components. Date objects are not supported.
-   * {id: ..., name: ..., email: ..., password: ..., createdAt: ..., updatedAt: Date}
-   */
   return (
     <div className={styles.container}>
       <div>
