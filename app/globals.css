@@ -49,3 +49,8 @@ ul {
 ol, ul {
   margin-left: 2rem;
 }
+
+h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+}
