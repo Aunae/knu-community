@@ -12,10 +12,12 @@ const HomePage = async (props: Props) => {
   return (
     <Suspense>
       <div className={styles.page}>
-        {/* @ts-expect-error Server Component */}
-        <PostSection {...props} />
-        <PostFloatingButton />
+        <section className={styles.section}>
+          {/* @ts-expect-error Server Component */}
+          <PostSection {...props} />
+        </section>
       </div>
+      <PostFloatingButton />
     </Suspense>
   );
 };

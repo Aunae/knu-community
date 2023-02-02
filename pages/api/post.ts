@@ -7,11 +7,6 @@ import { userService } from '../../libs/services/user/user.service';
 const PostController = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
     case HTTP_METHOD.POST:
-      // const { name, email, password } = req.body;
-      // const hashedPassword = await hashPassword(password);
-      // const user = await userService.createUser({ name, email, password: hashedPassword });
-      console.log('MESSAGE', req.body);
-      // return res.status(HTTP_STATUS.OK).json({ user });
       const { title, content, published, session, category } = req.body;
       const user = await userService.getUser(session.user.email);
       if (!user) return res.status(HTTP_STATUS.BAD_REQUEST).json({ post: null });
@@ -40,6 +35,12 @@ const PostController = async (req: NextApiRequest, res: NextApiResponse) => {
         },
       });
       return res.status(HTTP_STATUS.OK).json(post);
+    case HTTP_METHOD.GET:
+      const { skip, take } = req.headers;
+      if (typeof skip === 'string' && typeof take === 'string') {
+        const posts = await postService.getPosts(+skip, +take);
+        return res.status(HTTP_STATUS.OK).json(posts);
+      }
     default:
       return res.status(HTTP_STATUS.BAD_REQUEST).json({ post: null });
   }
