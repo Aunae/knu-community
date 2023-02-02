@@ -14,6 +14,7 @@ const NewPost = () => {
   const [title, setTitle] = useState<string>('');
   const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
   const onClick = () => {
+    if (title.trim() === '') return;
     setSubmitDisabled(true);
     const element = document.getElementById('editor');
     if (element?.innerHTML) localStorage.setItem('temp', element.innerHTML);
