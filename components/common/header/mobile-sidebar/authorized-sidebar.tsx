@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Accordion from './accordion';
 import { CategoryWithChildren } from '../../../../libs/models/category';
 import { signOut } from 'next-auth/react';
+import CategoryList from './category-list';
 
 interface Props {
   categories: CategoryWithChildren[];
@@ -28,11 +29,7 @@ const AuthorizedSidebar = ({ handleClose, categories }: Props) => {
       </div>
 
       {/*카테고리 목록*/}
-      <ul className="py-4">
-        {categories.map((category) => (
-          <Accordion key={category.id} category={category} />
-        ))}
-      </ul>
+      <CategoryList categories={categories} />
     </nav>
   );
 };
