@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import PostController from '../../../pages/api/post';
-import BlockEditor from './block-editor';
+import BlockEditor from './block-editor/block-editor';
 import Editor from './editor';
 import styles from './newpost.module.scss';
 
