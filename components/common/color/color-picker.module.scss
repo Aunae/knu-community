@@ -2,7 +2,7 @@
     display: flex;
     position: absolute;
     z-index: 10;
-    width: 17rem;
+    width: 20rem;
     background-color: var(--bgcolor);
 }
 
@@ -12,9 +12,28 @@
 }
 
 .item {
-    button {
+    position: relative;
+    
+    width: 1.5rem;
+    height: 1.5rem;
+    .color_palette {
         width: 1rem;
         height: 1rem;
+        box-shadow: 0 1px rgba(0, 0, 0, 0.1);
+    }
+    .no_color {
+        position: relative;
+        top: -0.5rem;
+        &::before {
+            position: absolute;
+            left: 50%;
+            top: -0rem;
+            height: 1rem;
+            width: 1px;
+            content: '';
+            background-color: red;
+            transform: rotate(45deg);
+        }
     }
     span {
         display: none;

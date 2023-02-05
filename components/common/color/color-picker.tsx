@@ -10,7 +10,6 @@ type Props = {
  * @param param0 color must be hex string
  */
 const ColorLens = ({ active, onBlur, setColor }: Props) => {
-  // FIXME: onBlur 잘 안되는 버그 수정
   return (
     <>
       {active && (
@@ -21,13 +20,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
           <div>더보기</div>
           <ul className={styles.list}>
             <li className={styles.item}>
-              <button
-                type="button"
-                onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette se-color-palette-no-color"
-                color=""
-                title="색상 없음"
-              >
+              <button type="button" onClick={(e) => setColor('none')} className={`${styles.color_palette} ${styles.no_color}`} color="" title="색상 없음">
                 <span className="se-blind">색상 없음</span>
               </button>
             </li>
@@ -35,7 +28,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#999999"
                 title="#999999"
                 style={{ backgroundColor: 'rgb(153, 153, 153)' }}
@@ -47,7 +40,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#ffcdc0"
                 title="#ffcdc0"
                 style={{ backgroundColor: 'rgb(255, 205, 192)' }}
@@ -59,7 +52,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#ffe3c8"
                 title="#ffe3c8"
                 style={{ backgroundColor: 'rgb(255, 227, 200)' }}
@@ -71,7 +64,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#fff8b2"
                 title="#fff8b2"
                 style={{ backgroundColor: 'rgb(255, 248, 178)' }}
@@ -83,7 +76,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#e3fdc8"
                 title="#e3fdc8"
                 style={{ backgroundColor: 'rgb(227, 253, 200)' }}
@@ -95,7 +88,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#c2f4db"
                 title="#c2f4db"
                 style={{ backgroundColor: 'rgb(194, 244, 219)' }}
@@ -107,7 +100,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#bdfbfa"
                 title="#bdfbfa"
                 style={{ backgroundColor: 'rgb(189, 251, 250)' }}
@@ -119,7 +112,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#b0f1ff"
                 title="#b0f1ff"
                 style={{ backgroundColor: 'rgb(176, 241, 255)' }}
@@ -131,7 +124,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#9bdfff"
                 title="#9bdfff"
                 style={{ backgroundColor: 'rgb(155, 223, 255)' }}
@@ -143,7 +136,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#fdd5f5"
                 title="#fdd5f5"
                 style={{ backgroundColor: 'rgb(253, 213, 245)' }}
@@ -155,7 +148,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#ffb7de"
                 title="#ffb7de"
                 style={{ backgroundColor: 'rgb(255, 183, 222)' }}
@@ -167,7 +160,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#ffffff"
                 title="#ffffff"
                 style={{ backgroundColor: 'rgb(255, 255, 255)' }}
@@ -179,7 +172,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#777777"
                 title="#777777"
                 style={{ backgroundColor: 'rgb(119, 119, 119)' }}
@@ -191,7 +184,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#ffad98"
                 title="#ffad98"
                 style={{ backgroundColor: 'rgb(255, 173, 152)' }}
@@ -203,7 +196,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#ffd1a4"
                 title="#ffd1a4"
                 style={{ backgroundColor: 'rgb(255, 209, 164)' }}
@@ -215,7 +208,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#fff593"
                 title="#fff593"
                 style={{ backgroundColor: 'rgb(255, 245, 147)' }}
@@ -227,7 +220,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#badf98"
                 title="#badf98"
                 style={{ backgroundColor: 'rgb(186, 223, 152)' }}
@@ -239,7 +232,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#3fcc9c"
                 title="#3fcc9c"
                 style={{ backgroundColor: 'rgb(63, 204, 156)' }}
@@ -251,7 +244,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#15d0ca"
                 title="#15d0ca"
                 style={{ backgroundColor: 'rgb(21, 208, 202)' }}
@@ -263,7 +256,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#28e1ff"
                 title="#28e1ff"
                 style={{ backgroundColor: 'rgb(40, 225, 255)' }}
@@ -275,7 +268,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#5bc7ff"
                 title="#5bc7ff"
                 style={{ backgroundColor: 'rgb(91, 199, 255)' }}
@@ -287,7 +280,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#cd8bc0"
                 title="#cd8bc0"
                 style={{ backgroundColor: 'rgb(205, 139, 192)' }}
@@ -299,7 +292,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#ff97c1"
                 title="#ff97c1"
                 style={{ backgroundColor: 'rgb(255, 151, 193)' }}
@@ -311,7 +304,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#f7f7f7"
                 title="#f7f7f7"
                 style={{ backgroundColor: 'rgb(247, 247, 247)' }}
@@ -323,7 +316,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#555555"
                 title="#555555"
                 style={{ backgroundColor: 'rgb(85, 85, 85)' }}
@@ -335,7 +328,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#ff5f45"
                 title="#ff5f45"
                 style={{ backgroundColor: 'rgb(255, 95, 69)' }}
@@ -347,7 +340,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#ffa94f"
                 title="#ffa94f"
                 style={{ backgroundColor: 'rgb(255, 169, 79)' }}
@@ -359,7 +352,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#ffef34"
                 title="#ffef34"
                 style={{ backgroundColor: 'rgb(255, 239, 52)' }}
@@ -371,7 +364,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#98d36c"
                 title="#98d36c"
                 style={{ backgroundColor: 'rgb(152, 211, 108)' }}
@@ -383,7 +376,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#00b976"
                 title="#00b976"
                 style={{ backgroundColor: 'rgb(0, 185, 118)' }}
@@ -395,7 +388,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#00bfb5"
                 title="#00bfb5"
                 style={{ backgroundColor: 'rgb(0, 191, 181)' }}
@@ -407,7 +400,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#00cdff"
                 title="#00cdff"
                 style={{ backgroundColor: 'rgb(0, 205, 255)' }}
@@ -419,7 +412,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#0095e9"
                 title="#0095e9"
                 style={{ backgroundColor: 'rgb(0, 149, 233)' }}
@@ -431,7 +424,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#bc61ab"
                 title="#bc61ab"
                 style={{ backgroundColor: 'rgb(188, 97, 171)' }}
@@ -443,7 +436,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#ff65a8"
                 title="#ff65a8"
                 style={{ backgroundColor: 'rgb(255, 101, 168)' }}
@@ -455,7 +448,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#e2e2e2"
                 title="#e2e2e2"
                 style={{ backgroundColor: 'rgb(226, 226, 226)' }}
@@ -467,7 +460,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#333333"
                 title="#333333"
                 style={{ backgroundColor: 'rgb(51, 51, 51)' }}
@@ -479,7 +472,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#ff0010"
                 title="#ff0010"
                 style={{ backgroundColor: 'rgb(255, 0, 16)' }}
@@ -491,7 +484,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#ff9300"
                 title="#ff9300"
                 style={{ backgroundColor: 'rgb(255, 147, 0)' }}
@@ -503,7 +496,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#ffd300"
                 title="#ffd300"
                 style={{ backgroundColor: 'rgb(255, 211, 0)' }}
@@ -515,7 +508,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#54b800"
                 title="#54b800"
                 style={{ backgroundColor: 'rgb(84, 184, 0)' }}
@@ -527,7 +520,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#00a84b"
                 title="#00a84b"
                 style={{ backgroundColor: 'rgb(0, 168, 75)' }}
@@ -539,7 +532,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#009d91"
                 title="#009d91"
                 style={{ backgroundColor: 'rgb(0, 157, 145)' }}
@@ -551,7 +544,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#00b3f2"
                 title="#00b3f2"
                 style={{ backgroundColor: 'rgb(0, 179, 242)' }}
@@ -563,7 +556,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#0078cb"
                 title="#0078cb"
                 style={{ backgroundColor: 'rgb(0, 120, 203)' }}
@@ -575,7 +568,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#aa1f91"
                 title="#aa1f91"
                 style={{ backgroundColor: 'rgb(170, 31, 145)' }}
@@ -587,7 +580,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#ff008c"
                 title="#ff008c"
                 style={{ backgroundColor: 'rgb(255, 0, 140)' }}
@@ -599,7 +592,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#c2c2c2"
                 title="#c2c2c2"
                 style={{ backgroundColor: 'rgb(194, 194, 194)' }}
@@ -611,7 +604,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#141414"
                 title="#141414"
                 style={{ backgroundColor: 'rgb(20, 20, 20)' }}
@@ -623,7 +616,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#ba0000"
                 title="#ba0000"
                 style={{ backgroundColor: 'rgb(186, 0, 0)' }}
@@ -635,7 +628,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#b85c00"
                 title="#b85c00"
                 style={{ backgroundColor: 'rgb(184, 92, 0)' }}
@@ -647,7 +640,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#ac9a00"
                 title="#ac9a00"
                 style={{ backgroundColor: 'rgb(172, 154, 0)' }}
@@ -659,7 +652,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#36851e"
                 title="#36851e"
                 style={{ backgroundColor: 'rgb(54, 133, 30)' }}
@@ -671,7 +664,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#007433"
                 title="#007433"
                 style={{ backgroundColor: 'rgb(0, 116, 51)' }}
@@ -683,7 +676,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#00756a"
                 title="#00756a"
                 style={{ backgroundColor: 'rgb(0, 117, 106)' }}
@@ -695,7 +688,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#007aa6"
                 title="#007aa6"
                 style={{ backgroundColor: 'rgb(0, 122, 166)' }}
@@ -707,7 +700,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#004e82"
                 title="#004e82"
                 style={{ backgroundColor: 'rgb(0, 78, 130)' }}
@@ -719,7 +712,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#740060"
                 title="#740060"
                 style={{ backgroundColor: 'rgb(116, 0, 96)' }}
@@ -731,7 +724,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#bb005c"
                 title="#bb005c"
                 style={{ backgroundColor: 'rgb(187, 0, 92)' }}
@@ -743,7 +736,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#9c9c9c"
                 title="#9c9c9c"
                 style={{ backgroundColor: 'rgb(156, 156, 156)' }}
@@ -755,7 +748,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#000000"
                 title="#000000"
                 style={{ backgroundColor: 'rgb(0, 0, 0)' }}
@@ -767,7 +760,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#700001"
                 title="#700001"
                 style={{ backgroundColor: 'rgb(112, 0, 1)' }}
@@ -779,7 +772,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#823f00"
                 title="#823f00"
                 style={{ backgroundColor: 'rgb(130, 63, 0)' }}
@@ -791,7 +784,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#6a5f00"
                 title="#6a5f00"
                 style={{ backgroundColor: 'rgb(106, 95, 0)' }}
@@ -803,7 +796,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#245b12"
                 title="#245b12"
                 style={{ backgroundColor: 'rgb(36, 91, 18)' }}
@@ -815,7 +808,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#004e22"
                 title="#004e22"
                 style={{ backgroundColor: 'rgb(0, 78, 34)' }}
@@ -827,7 +820,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#00554c"
                 title="#00554c"
                 style={{ backgroundColor: 'rgb(0, 85, 76)' }}
@@ -839,7 +832,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#004e6a"
                 title="#004e6a"
                 style={{ backgroundColor: 'rgb(0, 78, 106)' }}
@@ -851,7 +844,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#003960"
                 title="#003960"
                 style={{ backgroundColor: 'rgb(0, 57, 96)' }}
@@ -863,7 +856,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#4f0041"
                 title="#4f0041"
                 style={{ backgroundColor: 'rgb(79, 0, 65)' }}
@@ -875,7 +868,7 @@ const ColorLens = ({ active, onBlur, setColor }: Props) => {
               <button
                 type="button"
                 onClick={(e) => setColor((e.nativeEvent.target as any)?.lastChild.innerText)}
-                className="se-color-palette"
+                className={styles.color_palette}
                 color="#830041"
                 title="#830041"
                 style={{ backgroundColor: 'rgb(131, 0, 65)' }}
