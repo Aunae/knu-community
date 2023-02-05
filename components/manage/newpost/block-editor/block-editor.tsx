@@ -1,8 +1,10 @@
 'use client';
 import styles from './block-editor.module.scss';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ColorLens from '../../../common/color/color-picker';
 import EditorButtons from './editor-buttons';
+import EditableBlock from './editable-block';
+import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 
 enum ButtonStyle {
   bold = 'bold',
@@ -18,10 +20,20 @@ enum ButtonStyle {
 
 const defaultTagSeparator = 'div';
 
+interface Block {
+  value: HTMLCollection | null;
+  index: number;
+}
+
 type Props = {};
+
+// FIXME: react17 버전 이슈로 react-beautiful-dnd가 정상적으로 작동하지 않습니다. React.StrictMode를 false로 설정해야 됩니다.
+// TODO: BlockEditor로 수정한 Post가 서버로 전달되는 기능을 구현해야합니다.
 const BlockEditor = ({}: Props) => {
   const [foreColorPicker, setForeColorPicker] = useState(false);
   const [backColorPicker, setBackColorPicker] = useState(false);
+  const [blocks, setBlocks] = useState<Block[]>([]);
+  const blockCount = useRef(0);
 
   useEffect(() => {
     document.execCommand('defaultParagraphSeparator', false, defaultTagSeparator);
@@ -125,14 +137,76 @@ const BlockEditor = ({}: Props) => {
     setBackColorPicker(false);
   };
 
+  // EditableBlock들의 focus를 조율하는 함수
+  const onFoucsBlock = (e: React.FocusEvent<HTMLDivElement, Element>) => {
+    const focusedBlock = document.getElementById('editor');
+    if (focusedBlock) focusedBlock.id = '';
+    e.target.id = 'editor';
+  };
+
+  const onDragEnd = (result: DropResult) => {
+    const { source, destination } = result;
+    if (!destination) return;
+    if (source.droppableId === destination.droppableId && source.index === destination.index) return;
+
+    let add: Block;
+    let newBlock = blocks;
+
+    add = newBlock[source.index];
+    newBlock.splice(source.index, 1);
+    newBlock.splice(destination.index, 0, add);
+    console.log(newBlock);
+    setBlocks(newBlock);
+  };
+
   return (
-    <div className={styles.container}>
-      <EditorButtons
-        onClickEditButton={onClickEditButton}
-        focusEditor={focusEditor}
-        {...{ foreColorPicker, setForeColorPicker, backColorPicker, setBackColorPicker }}
-      />
-      <div
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div className={styles.container}>
+        <EditorButtons
+          onClickEditButton={onClickEditButton}
+          focusEditor={focusEditor}
+          {...{ foreColorPicker, setForeColorPicker, backColorPicker, setBackColorPicker }}
+        />
+
+        <div className={styles.editor_container}>
+          {/* Drappable Block Editor List */}
+          <Droppable droppableId="edit_block_droppable">
+            {(provided) => (
+              <div ref={provided.innerRef} {...provided.droppableProps}>
+                {blocks.map((val, index) => {
+                  return (
+                    <EditableBlock
+                      key={`${val.index}-`}
+                      draggableId={`draggableId_${val.index}`}
+                      index={index}
+                      block={val.value}
+                      setBlock={(e: HTMLCollection) => {
+                        var newBlocks = blocks;
+                        console.log('newblocks before', newBlocks, index);
+                        newBlocks = newBlocks.map((v, i) => (v.index === val.index ? { ...v, value: e } : v));
+                        setBlocks(newBlocks);
+                      }}
+                      onFocus={onFoucsBlock}
+                      {...{ checkStyle, closeColorPickers, onKeyDown }}
+                    />
+                  );
+                })}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+          <div
+            className={styles.editor_add_block}
+            onClick={() => {
+              const tmp: Block[] = [];
+              tmp.push(...blocks);
+              tmp.push({ index: blockCount.current, value: null });
+              blockCount.current += 1;
+              setBlocks(tmp);
+            }}
+          ></div>
+        </div>
+        {/* <div
         id="editor"
         className={styles.editor}
         contentEditable={true}
@@ -145,10 +219,9 @@ const BlockEditor = ({}: Props) => {
           checkStyle();
           closeColorPickers();
         }}
-      >
-        <div className={styles.block} contentEditable={true}></div>
+      ></div> */}
       </div>
-    </div>
+    </DragDropContext>
   );
 };
 

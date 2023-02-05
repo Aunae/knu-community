@@ -39,7 +39,7 @@ const EditorButtons = ({ onClickEditButton, focusEditor, foreColorPicker, setFor
   };
 
   return (
-    <div>
+    <>
       <div className={styles.menu}>
         <button
           id="btn_foreColor"
@@ -130,7 +130,7 @@ const EditorButtons = ({ onClickEditButton, focusEditor, foreColorPicker, setFor
           }}
         />
       </div>
-    </div>
+    </>
   );
 };
 

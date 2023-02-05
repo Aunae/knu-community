@@ -1,0 +1,17 @@
+.item {
+  display: flex;
+  &:hover .draggable{
+    color: rgba(0, 0, 0);
+    visibility: visible;
+  }
+}
+
+.editor {
+  width: 100%;
+}
+
+.draggable {
+  visibility: hidden;
+  color: rgba(0, 0, 0, 0);
+  transition: 0.2s ease all;
+}
