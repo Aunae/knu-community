@@ -1,16 +1,15 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { HTTP_METHOD, HTTP_STATUS } from '../../libs/constants/http';
 import { userService } from '../../libs/services/user/user.service';
-// import bcrypt, { compare } from 'bcrypt';
-import bcrypt, { compare } from 'bcryptjs';
+import bcrypt from 'bcryptjs';
 
 export async function hashPassword(password: string): Promise<string> {
-  const hashedPassword = await bcrypt.hash(password, 13);
+  const hashedPassword = await bcrypt.hash(password, process.env.NEXTAUTH_SECERT ?? 'oaisdhjoaishd');
   return hashedPassword;
 }
 
 export async function verifyPassword(password: string, hashedPassword: string): Promise<boolean> {
-  const valid = await compare(password, hashedPassword);
+  const valid = await bcrypt.compare(password, hashedPassword);
   return valid;
 }
 
