@@ -5,6 +5,7 @@ import ColorLens from '../../../common/color/color-picker';
 import EditorButtons from './editor-buttons';
 import EditableBlock from './editable-block';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
+import { useStrictDroppable } from '../../../hooks/useStrictDroppable';
 
 enum ButtonStyle {
   bold = 'bold',
@@ -34,6 +35,7 @@ const BlockEditor = ({}: Props) => {
   const [backColorPicker, setBackColorPicker] = useState(false);
   const [blocks, setBlocks] = useState<Block[]>([]);
   const blockCount = useRef(0);
+  const [enabled] = useStrictDroppable(false);
 
   useEffect(() => {
     document.execCommand('defaultParagraphSeparator', false, defaultTagSeparator);
@@ -170,31 +172,33 @@ const BlockEditor = ({}: Props) => {
 
         <div className={styles.editor_container}>
           {/* Drappable Block Editor List */}
-          <Droppable droppableId="edit_block_droppable">
-            {(provided) => (
-              <div ref={provided.innerRef} {...provided.droppableProps}>
-                {blocks.map((val, index) => {
-                  return (
-                    <EditableBlock
-                      key={`${val.index}-`}
-                      draggableId={`draggableId_${val.index}`}
-                      index={index}
-                      block={val.value}
-                      setBlock={(e: HTMLCollection) => {
-                        var newBlocks = blocks;
-                        console.log('newblocks before', newBlocks, index);
-                        newBlocks = newBlocks.map((v, i) => (v.index === val.index ? { ...v, value: e } : v));
-                        setBlocks(newBlocks);
-                      }}
-                      onFocus={onFoucsBlock}
-                      {...{ checkStyle, closeColorPickers, onKeyDown }}
-                    />
-                  );
-                })}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
+          {enabled && (
+            <Droppable droppableId="edit_block_droppable">
+              {(provided) => (
+                <div ref={provided.innerRef} {...provided.droppableProps}>
+                  {blocks.map((val, index) => {
+                    return (
+                      <EditableBlock
+                        key={`${val.index}-`}
+                        draggableId={`draggableId_${val.index}`}
+                        index={index}
+                        block={val.value}
+                        setBlock={(e: HTMLCollection) => {
+                          var newBlocks = blocks;
+                          console.log('newblocks before', newBlocks, index);
+                          newBlocks = newBlocks.map((v, i) => (v.index === val.index ? { ...v, value: e } : v));
+                          setBlocks(newBlocks);
+                        }}
+                        onFocus={onFoucsBlock}
+                        {...{ checkStyle, closeColorPickers, onKeyDown }}
+                      />
+                    );
+                  })}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          )}
           <div
             className={styles.editor_add_block}
             onClick={() => {
@@ -206,20 +210,6 @@ const BlockEditor = ({}: Props) => {
             }}
           ></div>
         </div>
-        {/* <div
-        id="editor"
-        className={styles.editor}
-        contentEditable={true}
-        suppressContentEditableWarning={true}
-        onChange={(e) => console.log(e)}
-        onKeyDown={onKeyDown}
-        onKeyUp={checkStyle}
-        onMouseDown={checkStyle}
-        onClick={() => {
-          checkStyle();
-          closeColorPickers();
-        }}
-      ></div> */}
       </div>
     </DragDropContext>
   );

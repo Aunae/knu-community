@@ -1,9 +1,10 @@
-import NextAuth from 'next-auth';
+import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialProvider from 'next-auth/providers/credentials';
 import crypto from 'crypto';
 import { userService } from '../../../libs/services/user/user.service';
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     CredentialProvider({
       id: 'user-credentials',
@@ -20,7 +21,6 @@ export default NextAuth({
       },
     }),
   ],
-  secret: 'test',
   pages: {
     signIn: '/login',
   },
@@ -48,4 +48,6 @@ export default NextAuth({
       return baseUrl;
     },
   },
-});
+};
+
+export default NextAuth(authOptions);

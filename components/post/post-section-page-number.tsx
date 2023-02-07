@@ -14,7 +14,7 @@ type Props = {
   params: any;
 };
 /**
- *
+ * TODO: 버그 수정
  * @param param0 {interval: must be odd number}
  * @returns
  */
@@ -52,7 +52,7 @@ const PostSectionPageNumber = ({ onClick, params, currentNumber, lastNumber, int
     console.log(lastNumber);
     var start = currentNumber - halfInterval;
     var end = currentNumber + halfInterval;
-    if (interval < lastNumber) {
+    if (interval > lastNumber) {
       start = 1;
       end = lastNumber;
     } else {
@@ -61,7 +61,7 @@ const PostSectionPageNumber = ({ onClick, params, currentNumber, lastNumber, int
         end = interval > lastNumber ? lastNumber : interval;
       } else if (end > lastNumber) {
         end = end - (end - lastNumber);
-        start = interval > lastNumber ? lastNumber - interval + 1 : 1;
+        start = interval > lastNumber ? 1 : lastNumber - interval + 1;
       }
     }
     const n: number[] = [];

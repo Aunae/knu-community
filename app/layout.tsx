@@ -1,14 +1,15 @@
 import './globals.css';
 import { ReactNode } from 'react';
-import { unstable_getServerSession } from 'next-auth';
+import { getServerSession } from 'next-auth/next';
 import Providers from './providers';
+import { getSession } from 'next-auth/react';
 
 interface Props {
   children: ReactNode;
 }
 
 const RootLayout = async ({ children }: Props) => {
-  const session = await unstable_getServerSession();
+  const session = await getSession();
 
   return (
     <html lang="en">
