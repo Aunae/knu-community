@@ -70,7 +70,7 @@ const PostSectionMain = ({}: Props) => {
         <LoadingComponent loading={loading} />
       </div>
       <Suspense>
-        <PostSectionPageNumber onClick={onClickPageNumber} params={params} currentNumber={page} lastNumber={27} />
+        <PostSectionPageNumber onClick={onClickPageNumber} params={params} currentNumber={page} lastNumber={pageLength} />
       </Suspense>
     </>
   );
