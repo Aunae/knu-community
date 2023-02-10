@@ -1,7 +1,7 @@
 'use client';
 import styles from './block-editor.module.scss';
 import React, { useEffect, useRef, useState } from 'react';
-import EditorButtons from './editor-buttons';
+import EditorButtons, { getButtonActiveStyle } from './editor-buttons';
 import EditableBlock from './editable-block';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { useStrictDroppable } from '../../../hooks/useStrictDroppable';
@@ -37,8 +37,8 @@ export const getInnerHTML = (collection: HTMLCollection) => {
 
 type Props = {};
 
-// FIXME: react17 버전 이슈로 react-beautiful-dnd가 정상적으로 작동하지 않습니다. React.StrictMode를 false로 설정해야 됩니다.
-// TODO: BlockEditor로 수정한 Post가 서버로 전달되는 기능을 구현해야합니다.
+// TODO: ondrag일 때 블럭을 delete할 수 있는 코드를 구현해야합니다.
+// TODO: delete 이후에 Undo 기능을 구현해야합니다. (history)
 const BlockEditor = ({}: Props) => {
   const [foreColorPicker, setForeColorPicker] = useState(false);
   const [backColorPicker, setBackColorPicker] = useState(false);
@@ -114,9 +114,9 @@ const BlockEditor = ({}: Props) => {
     styleList.forEach((val) => {
       const element = document.getElementById(`btn_${val}`);
       if (document.queryCommandState(val)) {
-        element?.classList.add(`${styles.active}`);
+        element?.classList.add(`${getButtonActiveStyle()}`);
       } else {
-        element?.classList.remove(`${styles.active}`);
+        element?.classList.remove(`${getButtonActiveStyle()}`);
       }
     });
     // foreColor 코드
@@ -167,6 +167,7 @@ const BlockEditor = ({}: Props) => {
   const onFoucsBlock = (e: React.FocusEvent<HTMLDivElement, Element>) => {
     const focusedBlock = document.getElementById('editor');
     if (focusedBlock) focusedBlock.id = '';
+    // console.log('focused', focusedBlock?.attributes.getNamedItem('accessKey')?.value);
     e.target.id = 'editor';
   };
 

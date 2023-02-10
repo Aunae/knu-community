@@ -22,6 +22,8 @@ interface Props {
   setBackColorPicker: (val: boolean) => void;
 }
 
+export const getButtonActiveStyle = () => styles.active;
+
 const EditorButtons = ({ onClickEditButton, focusEditor, foreColorPicker, setForeColorPicker, backColorPicker, setBackColorPicker }: Props) => {
   const insertImageDate = (file: any) => {
     const reader = new FileReader();
