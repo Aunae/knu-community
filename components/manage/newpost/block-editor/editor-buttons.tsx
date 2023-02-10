@@ -105,11 +105,11 @@ const EditorButtons = ({ onClickEditButton, focusEditor, foreColorPicker, setFor
           <span className={styles.tooltiptext}>취소선</span>
         </button>
         <button id="btn_insertOrderedList" className={styles.btn_ordered_list} onClick={() => onClickEditButton('insertOrderedList')}>
-          <FormatListBulletedIcon />
+          <FormatListNumberedIcon />
           <span className={styles.tooltiptext}>순서 있는 리스트</span>
         </button>
         <button id="btn_insertUnorderedList" className={styles.btn_unordered_list} onClick={() => onClickEditButton('insertUnorderedList')}>
-          <FormatListNumberedIcon />
+          <FormatListBulletedIcon />
           <span className={styles.tooltiptext}>순서 없는 리스트</span>
         </button>
         <button id="btn_image" className={styles.btn_image} onClick={() => onClickImageButton()}>

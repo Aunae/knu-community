@@ -1,11 +1,11 @@
 'use client';
 import styles from './block-editor.module.scss';
 import React, { useEffect, useRef, useState } from 'react';
-import ColorLens from '../../../common/color/color-picker';
 import EditorButtons from './editor-buttons';
 import EditableBlock from './editable-block';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { useStrictDroppable } from '../../../hooks/useStrictDroppable';
+import AddIcon from '@mui/icons-material/Add';
 
 enum ButtonStyle {
   bold = 'bold',
@@ -22,9 +22,18 @@ enum ButtonStyle {
 const defaultTagSeparator = 'div';
 
 interface Block {
-  value: HTMLCollection | null;
+  value: string | null;
   index: number;
 }
+
+export const getInnerHTML = (collection: HTMLCollection) => {
+  var htmlString = '';
+  for (let i = 0; i < collection.length; i++) {
+    const outer = collection.item(i)?.outerHTML;
+    if (outer) htmlString += outer;
+  }
+  return htmlString;
+};
 
 type Props = {};
 
@@ -33,13 +42,17 @@ type Props = {};
 const BlockEditor = ({}: Props) => {
   const [foreColorPicker, setForeColorPicker] = useState(false);
   const [backColorPicker, setBackColorPicker] = useState(false);
-  const [blocks, setBlocks] = useState<Block[]>([]);
   const blockCount = useRef(0);
+  const [blocks, setBlocks] = useState<Block[]>([]); // 매 이벤트마다 변경되는 데이터
+  const [renderingBlocks, setRenderingBlocks] = useState<Block[]>([]); // 렌더링 될 때만 적용되는 데이터
+  const [selectedBlock, setSelectedBlock] = useState(0);
   const [enabled] = useStrictDroppable(false);
 
   useEffect(() => {
     document.execCommand('defaultParagraphSeparator', false, defaultTagSeparator);
+    addNewBlock();
   }, []);
+
   const focusEditor = () => {
     document.getElementById('editor')?.focus({ preventScroll: true });
   };
@@ -56,39 +69,39 @@ const BlockEditor = ({}: Props) => {
   const onClickEditButton = (aCommandName: string, showUI: boolean | undefined = undefined, value: string | undefined = undefined) => {
     setStyle(aCommandName, showUI, value);
   };
-
+  const swapToDiv = (editor: HTMLElement) => {
+    if (editor.childNodes[0]?.nodeName === '#text') {
+      const str = editor.childNodes[0].nodeValue;
+      const p = document.createElement(defaultTagSeparator);
+      if (str) p.append(str);
+      editor.appendChild(p);
+      editor.childNodes[0].remove();
+      var range, selection;
+      if (document.createRange) {
+        //Firefox, Chrome, Opera, Safari, IE 9+
+        range = document.createRange(); //Create a range (a range is a like the selection but invisible)
+        range.selectNodeContents(editor); //Select the entire contents of the element with the range
+        range?.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
+        selection = window.getSelection(); //get the selection object (allows you to change selection)
+        selection?.removeAllRanges(); //remove any selections already made
+        selection?.addRange(range); //make the range you have just created the visible selection
+      } else if ((document as any).selection) {
+        //IE 8 and lower
+        range = (document.body as any).createTextRange(); //Create a range (a range is a like the selection but invisible)
+        range.moveToElementText(editor); //Select the entire contents of the element with the range
+        range.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
+        range.select(); //Select the range (make it the visible selection
+      }
+    }
+  };
   const checkStyle = () => {
     toggleCurrentStyles();
     // contentEditable의 첫 번째 child를 수정합니다.
     const editor = document.getElementById('editor');
     if (editor) {
-      // console.log(editor.childNodes);
-      if (editor.childNodes[0]?.nodeName === '#text') {
-        const str = editor.childNodes[0].nodeValue;
-        const p = document.createElement(defaultTagSeparator);
-        if (str) p.append(str);
-        editor.appendChild(p);
-        editor.childNodes[0].remove();
-        var range, selection;
-        if (document.createRange) {
-          //Firefox, Chrome, Opera, Safari, IE 9+
-          range = document.createRange(); //Create a range (a range is a like the selection but invisible)
-          range.selectNodeContents(editor); //Select the entire contents of the element with the range
-          range?.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
-          selection = window.getSelection(); //get the selection object (allows you to change selection)
-          selection?.removeAllRanges(); //remove any selections already made
-          selection?.addRange(range); //make the range you have just created the visible selection
-        } else if ((document as any).selection) {
-          //IE 8 and lower
-          range = (document.body as any).createTextRange(); //Create a range (a range is a like the selection but invisible)
-          range.moveToElementText(editor); //Select the entire contents of the element with the range
-          range.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
-          range.select(); //Select the range (make it the visible selection
-        }
-      }
+      // swapToDiv(editor);
 
       const ps = editor.getElementsByTagName(defaultTagSeparator);
-      // console.log(ps);
       for (let i = 0; i < ps.length; i++) {
         ps[i].setAttribute('draggable', 'true');
       }
@@ -132,6 +145,17 @@ const BlockEditor = ({}: Props) => {
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     checkStyle();
+    const editor = document.getElementById('editor');
+    if (e.key === 'Enter' && e.shiftKey.valueOf() == false) {
+      if (editor) swapToDiv(editor); // First child를 div안에 넣는 코드
+    }
+    if (e.key === 'Enter' && e.shiftKey.valueOf() == true) {
+      e.preventDefault();
+      if (editor) {
+        const index = parseInt(editor.accessKey);
+        addNewBlock(index);
+      }
+    }
   };
 
   const closeColorPickers = () => {
@@ -157,8 +181,33 @@ const BlockEditor = ({}: Props) => {
     add = newBlock[source.index];
     newBlock.splice(source.index, 1);
     newBlock.splice(destination.index, 0, add);
-    console.log(newBlock);
     setBlocks(newBlock);
+    setRenderingBlocks(newBlock);
+  };
+
+  const removeAllQueryCommandState = () => {
+    Object.values(ButtonStyle).forEach((val) => {
+      if (document.queryCommandState(val)) document.execCommand(val);
+    });
+    document.execCommand('justifyLeft');
+  };
+
+  const addNewBlock = (index?: number) => {
+    var tmp: Block[] = [];
+    if (index === null || index === undefined) {
+      tmp.push(...blocks);
+      tmp.push({ index: blockCount.current, value: null });
+    } else {
+      tmp.push(...blocks);
+      tmp.splice(index, 0, { index: blockCount.current, value: tmp[index].value });
+      tmp[index + 1].value = '';
+      document.execCommand('selectAll');
+      removeAllQueryCommandState();
+      document.execCommand('delete');
+    }
+    blockCount.current += 1;
+    setBlocks(tmp);
+    setRenderingBlocks(tmp);
   };
 
   return (
@@ -169,46 +218,41 @@ const BlockEditor = ({}: Props) => {
           focusEditor={focusEditor}
           {...{ foreColorPicker, setForeColorPicker, backColorPicker, setBackColorPicker }}
         />
-
+        <div id="send_editor_container" style={{ display: 'none' }}>
+          {blocks.map((block) => (
+            <div dangerouslySetInnerHTML={{ __html: block.value ?? '' }} />
+          ))}
+        </div>
         <div className={styles.editor_container}>
           {/* Drappable Block Editor List */}
           {enabled && (
             <Droppable droppableId="edit_block_droppable">
               {(provided) => (
-                <div ref={provided.innerRef} {...provided.droppableProps}>
-                  {blocks.map((val, index) => {
-                    return (
-                      <EditableBlock
-                        key={`${val.index}-`}
-                        draggableId={`draggableId_${val.index}`}
-                        index={index}
-                        block={val.value}
-                        setBlock={(e: HTMLCollection) => {
-                          var newBlocks = blocks;
-                          console.log('newblocks before', newBlocks, index);
-                          newBlocks = newBlocks.map((v, i) => (v.index === val.index ? { ...v, value: e } : v));
-                          setBlocks(newBlocks);
-                        }}
-                        onFocus={onFoucsBlock}
-                        {...{ checkStyle, closeColorPickers, onKeyDown }}
-                      />
-                    );
-                  })}
+                <div id="editor_container" ref={provided.innerRef} {...provided.droppableProps}>
+                  {renderingBlocks.map((val, index) => (
+                    <EditableBlock
+                      key={`${val.index}-`}
+                      draggableId={`draggableId_${val.index}`}
+                      index={index}
+                      block={val.value}
+                      selected={selectedBlock === index}
+                      data={(innerHTML: string) => {
+                        var newBlocks = renderingBlocks;
+                        newBlocks = newBlocks.map((v, i) => (v.index === val.index ? { ...v, value: innerHTML } : v));
+                        setBlocks(newBlocks);
+                      }}
+                      onFocus={onFoucsBlock}
+                      {...{ checkStyle, closeColorPickers, onKeyDown }}
+                    />
+                  ))}
                   {provided.placeholder}
                 </div>
               )}
             </Droppable>
           )}
-          <div
-            className={styles.editor_add_block}
-            onClick={() => {
-              const tmp: Block[] = [];
-              tmp.push(...blocks);
-              tmp.push({ index: blockCount.current, value: null });
-              blockCount.current += 1;
-              setBlocks(tmp);
-            }}
-          ></div>
+          <div className={styles.editor_add_block} onClick={() => addNewBlock()}>
+            <AddIcon />
+          </div>
         </div>
       </div>
     </DragDropContext>

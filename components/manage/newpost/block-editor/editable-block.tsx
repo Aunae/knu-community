@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import styles from './editable-block.module.scss';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
+import { getInnerHTML } from './block-editor';
 
 interface Props {
   onKeyDown: (e: any) => void;
@@ -11,24 +12,20 @@ interface Props {
   closeColorPickers: () => void;
   onFocus: (e: React.FocusEvent<HTMLDivElement, Element>) => void;
   index: number;
+  selected: boolean;
   draggableId: string;
-  setBlock: (val: HTMLCollection) => void;
-  block: HTMLCollection | null;
+  data: (val: string) => void;
+  block: string | null;
 }
 
-// TODO: focus 될 때만 editor id 붙이기.
-const EditableBlock = ({ onKeyDown, checkStyle, closeColorPickers, onFocus, draggableId, index, block, setBlock }: Props) => {
+const EditableBlock = ({ onKeyDown, checkStyle, closeColorPickers, onFocus, draggableId, index, selected, block, data }: Props) => {
   const [value, setValue] = useState<string>('');
   useEffect(() => {
-    var htmlString = '';
-    if (block)
-      for (let i = 0; i < block.length; i++) {
-        const outer = block.item(i)?.outerHTML;
-        if (outer) htmlString += outer;
-      }
-    setValue(htmlString);
-    console.log('block!', index);
+    // if (block) setValue(getInnerHTML(block));
+    if (block) setValue(block);
   }, [block]);
+
+  useEffect(() => {}, [selected]);
   return (
     <Draggable draggableId={draggableId} index={index}>
       {(provided) => (
@@ -37,15 +34,16 @@ const EditableBlock = ({ onKeyDown, checkStyle, closeColorPickers, onFocus, drag
             <MenuOpenIcon />
           </div>
           <div
+            accessKey={`${index}`}
             ref={provided.innerRef}
             {...provided.draggableProps}
             onFocus={onFocus}
-            className={styles.editor}
+            className={`${styles.editor} custom_editor`}
             contentEditable={true}
             suppressContentEditableWarning={true}
             onInput={(e) => {
-              const collection = (e.target as any).children as HTMLCollection;
-              setBlock(collection);
+              const innerHTML: string = (e.target as any).innerHTML;
+              data(innerHTML);
             }}
             dangerouslySetInnerHTML={{ __html: value }}
             onKeyDown={onKeyDown}

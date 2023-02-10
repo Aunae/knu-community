@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import PostController from '../../../pages/api/post';
 import BlockEditor from './block-editor/block-editor';
 import Editor from './editor';
 import styles from './newpost.module.scss';
@@ -16,10 +15,8 @@ const NewPost = () => {
   const onClick = () => {
     if (title.trim() === '') return;
     setSubmitDisabled(true);
-    const element = document.getElementById('editor');
+    const element = document.getElementById('send_editor_container');
     if (element?.innerHTML) localStorage.setItem('temp', element.innerHTML);
-    // console.log('inner:', element?.innerHTML);
-    // TODO: post posts.
     if (session && element) {
       const send = async () => {
         const data = await axios
@@ -34,8 +31,8 @@ const NewPost = () => {
         if (data.status === 200) router.push('/home');
         else {
           alert('등록에 실패했습니다. 다시 시도해주세요.');
-          setSubmitDisabled(false);
         }
+        setSubmitDisabled(false);
       };
       send();
     }
@@ -58,9 +55,11 @@ const NewPost = () => {
           }}
         ></textarea>
         {false ? <Editor /> : <BlockEditor />}
-        <button disabled={submitDisabled} onClick={onClick}>
-          등록
-        </button>
+        <div className={styles.submit_area}>
+          <button className={styles.submit_button} disabled={submitDisabled} onClick={onClick}>
+            등록
+          </button>
+        </div>
       </div>
     );
   return <div>뭔가 잘못 되었습니다...</div>;
