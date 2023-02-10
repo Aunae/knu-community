@@ -22,7 +22,7 @@ enum ButtonStyle {
 const defaultTagSeparator = 'div';
 
 interface Block {
-  value: string | null;
+  value: string;
   index: number;
 }
 
@@ -43,6 +43,7 @@ const BlockEditor = ({}: Props) => {
   const [foreColorPicker, setForeColorPicker] = useState(false);
   const [backColorPicker, setBackColorPicker] = useState(false);
   const blockCount = useRef(0);
+  const rerenderRef = useRef(0);
   const [blocks, setBlocks] = useState<Block[]>([]); // 매 이벤트마다 변경되는 데이터
   const [renderingBlocks, setRenderingBlocks] = useState<Block[]>([]); // 렌더링 될 때만 적용되는 데이터
   const [selectedBlock, setSelectedBlock] = useState(0);
@@ -164,10 +165,12 @@ const BlockEditor = ({}: Props) => {
   };
 
   // EditableBlock들의 focus를 조율하는 함수
-  const onFoucsBlock = (e: React.FocusEvent<HTMLDivElement, Element>) => {
+  const onFocusBlock = (e: React.FocusEvent<HTMLDivElement, Element>, index: number) => {
     const focusedBlock = document.getElementById('editor');
-    if (focusedBlock) focusedBlock.id = '';
-    // console.log('focused', focusedBlock?.attributes.getNamedItem('accessKey')?.value);
+    setSelectedBlock(index);
+    if (focusedBlock) {
+      focusedBlock.id = '';
+    }
     e.target.id = 'editor';
   };
 
@@ -184,6 +187,7 @@ const BlockEditor = ({}: Props) => {
     newBlock.splice(destination.index, 0, add);
     setBlocks(newBlock);
     setRenderingBlocks(newBlock);
+    setSelectedBlock(destination.index);
   };
 
   const removeAllQueryCommandState = () => {
@@ -197,18 +201,21 @@ const BlockEditor = ({}: Props) => {
     var tmp: Block[] = [];
     if (index === null || index === undefined) {
       tmp.push(...blocks);
-      tmp.push({ index: blockCount.current, value: null });
+      tmp.push({ index: blockCount.current, value: '' });
     } else {
       tmp.push(...blocks);
-      tmp.splice(index, 0, { index: blockCount.current, value: tmp[index].value });
-      tmp[index + 1].value = '';
-      document.execCommand('selectAll');
-      removeAllQueryCommandState();
-      document.execCommand('delete');
+      tmp.splice(index + 1, 0, { index: blockCount.current, value: '' });
+      setSelectedBlock(index + 1);
     }
     blockCount.current += 1;
     setBlocks(tmp);
     setRenderingBlocks(tmp);
+  };
+
+  const rerenderWithBlocks = (blocks: Block[]) => {
+    setRenderingBlocks(blocks);
+    console.log(blocks);
+    rerenderRef.current++;
   };
 
   return (
@@ -237,12 +244,15 @@ const BlockEditor = ({}: Props) => {
                       index={index}
                       block={val.value}
                       selected={selectedBlock === index}
-                      data={(innerHTML: string) => {
+                      data={(innerHTML: string, re?: boolean) => {
                         var newBlocks = renderingBlocks;
+                        console.log('AFTER', innerHTML);
                         newBlocks = newBlocks.map((v, i) => (v.index === val.index ? { ...v, value: innerHTML } : v));
                         setBlocks(newBlocks);
+                        if (re === true) rerenderWithBlocks(newBlocks);
                       }}
-                      onFocus={onFoucsBlock}
+                      onFocus={onFocusBlock}
+                      rerenderRef={rerenderRef.current}
                       {...{ checkStyle, closeColorPickers, onKeyDown }}
                     />
                   ))}
