@@ -24,9 +24,72 @@ interface Props {
   backColorPicker: boolean;
   setBackColorPicker: (val: boolean) => void;
 }
-
-export const getButtonActiveStyle = () => styles.active;
+export const isParentHasTagName = (node: any, tagName: string, lastParentNodeId: string = 'editor'): boolean => {
+  while (node !== undefined && node !== null && node.id !== lastParentNodeId) {
+    if (node.tagName === tagName.toUpperCase()) return true;
+    node = node?.parentNode;
+  }
+  return false;
+};
+const getFocusNode = (): Node | null | undefined => {
+  return window.getSelection()?.focusNode;
+};
+const isSubscriptOnFocus = (): boolean => {
+  var node: any = getFocusNode()?.parentNode;
+  return isParentHasTagName(node, 'SUB');
+};
+const isSuperscriptOnFocus = (): boolean => {
+  var node: any = getFocusNode()?.parentNode;
+  return isParentHasTagName(node, 'SUP');
+};
 export const getButtonId = (style: ButtonStyle): string => `id_${style}`;
+// 모든 스타일을 가져와서 버튼을 활성화/비활성화 합니다.
+export const toggleCurrentStyles = () => {
+  const styleList = Object.values(ButtonStyle);
+
+  styleList.forEach((val) => {
+    const element = document.getElementById(getButtonId(val));
+    if (val === 'subscript') {
+      if (isSubscriptOnFocus()) {
+        element?.classList.add(styles.active);
+      } else {
+        element?.classList.remove(styles.active);
+      }
+    } else if (val === 'superscript') {
+      if (isSuperscriptOnFocus()) {
+        element?.classList.add(styles.active);
+      } else {
+        element?.classList.remove(styles.active);
+      }
+    } else if (document.queryCommandState(val)) {
+      element?.classList.add(styles.active);
+    } else {
+      element?.classList.remove(styles.active);
+    }
+  });
+  // foreColor 코드
+  var node: any = getFocusNode()?.parentNode;
+  while (node?.id !== 'editor' && node?.attributes?.color?.value === undefined) {
+    node = node?.parentNode;
+    if (node === undefined || node === null) break;
+  }
+
+  const selectionAreaForeColor = node?.attributes?.color?.value ?? '#000000';
+  const foreColorElement = document.getElementById(`btn_foreColor`);
+  if (foreColorElement) foreColorElement.style['color'] = selectionAreaForeColor === 'rgb(255, 255, 255)' ? '#000000' : selectionAreaForeColor;
+
+  // hiliteColor 코드
+  // 가장 가까운 부모의 background-color attribute를 얻는 코드
+  var node: any = getFocusNode()?.parentNode;
+  while (node?.id !== 'editor' && node?.attributes?.style?.value === undefined) {
+    node = node?.parentNode;
+    if (node === undefined || node === null) break;
+  }
+
+  const selectionAreaBackColor = node?.attributes?.style?.value?.substr(18)?.replace(';', '') ?? '#000000';
+  const backColorElement = document.getElementById(`btn_hiliteColor`);
+  if (backColorElement) backColorElement.style['color'] = selectionAreaBackColor === 'rgb(255, 255, 255)' ? '#000000' : selectionAreaBackColor;
+};
 
 const EditorButtons = ({ onClickEditButton, focusEditor, foreColorPicker, setForeColorPicker, backColorPicker, setBackColorPicker }: Props) => {
   const insertImageDate = (file: any) => {
@@ -110,11 +173,25 @@ const EditorButtons = ({ onClickEditButton, focusEditor, foreColorPicker, setFor
           <StrikethroughSIcon />
           <span className={styles.tooltiptext}>취소선</span>
         </button>
-        <button id={getButtonId(ButtonStyle.subscript)} className={styles.btn_subscript} onClick={() => onClickEditButton(ButtonStyle.subscript)}>
+        <button
+          id={getButtonId(ButtonStyle.subscript)}
+          className={styles.btn_subscript}
+          onClick={() => {
+            onClickEditButton(ButtonStyle.subscript);
+            if (isSubscriptOnFocus()) onClickEditButton(ButtonStyle.subscript);
+          }}
+        >
           <SubscriptIcon />
           <span className={styles.tooltiptext}>Subscript</span>
         </button>
-        <button id={getButtonId(ButtonStyle.superscript)} className={styles.btn_superscript} onClick={() => onClickEditButton(ButtonStyle.superscript)}>
+        <button
+          id={getButtonId(ButtonStyle.superscript)}
+          className={styles.btn_superscript}
+          onClick={() => {
+            onClickEditButton(ButtonStyle.superscript);
+            if (isSuperscriptOnFocus()) onClickEditButton(ButtonStyle.superscript);
+          }}
+        >
           <SuperscriptIcon />
           <span className={styles.tooltiptext}>Superscript</span>
         </button>

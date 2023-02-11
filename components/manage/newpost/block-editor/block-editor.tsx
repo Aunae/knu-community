@@ -1,7 +1,7 @@
 'use client';
 import styles from './block-editor.module.scss';
 import React, { useEffect, useRef, useState } from 'react';
-import EditorButtons, { getButtonActiveStyle, getButtonId } from './editor-buttons';
+import EditorButtons, { isParentHasTagName, toggleCurrentStyles } from './editor-buttons';
 import EditableBlock from './editable-block';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { useStrictDroppable } from '../../../hooks/useStrictDroppable';
@@ -24,6 +24,36 @@ export const getInnerHTML = (collection: HTMLCollection) => {
   return htmlString;
 };
 
+export const focusEditor = () => {
+  document.getElementById('editor')?.focus({ preventScroll: true });
+};
+
+export const swapToDiv = (editor: HTMLElement) => {
+  if (editor.childNodes[0]?.nodeName === '#text') {
+    const str = editor.childNodes[0].nodeValue;
+    const p = document.createElement(defaultTagSeparator);
+    if (str) p.append(str);
+    editor.appendChild(p);
+    editor.childNodes[0].remove();
+    var range, selection;
+    if (document.createRange) {
+      //Firefox, Chrome, Opera, Safari, IE 9+
+      range = document.createRange(); //Create a range (a range is a like the selection but invisible)
+      range.selectNodeContents(editor); //Select the entire contents of the element with the range
+      range?.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
+      selection = window.getSelection(); //get the selection object (allows you to change selection)
+      selection?.removeAllRanges(); //remove any selections already made
+      selection?.addRange(range); //make the range you have just created the visible selection
+    } else if ((document as any).selection) {
+      //IE 8 and lower
+      range = (document.body as any).createTextRange(); //Create a range (a range is a like the selection but invisible)
+      range.moveToElementText(editor); //Select the entire contents of the element with the range
+      range.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
+      range.select(); //Select the range (make it the visible selection
+    }
+  }
+};
+
 type Props = {};
 
 // TODO: ondrag일 때 블럭을 delete할 수 있는 코드를 구현해야합니다.
@@ -43,10 +73,6 @@ const BlockEditor = ({}: Props) => {
     addNewBlock();
   }, []);
 
-  const focusEditor = () => {
-    document.getElementById('editor')?.focus({ preventScroll: true });
-  };
-
   // TODO: fore, back color picker
   const setStyle = (aCommandName: string, showUI: boolean | undefined = undefined, value: string | undefined = undefined) => {
     document.execCommand(aCommandName, showUI, value);
@@ -59,31 +85,7 @@ const BlockEditor = ({}: Props) => {
   const onClickEditButton = (aCommandName: string, showUI: boolean | undefined = undefined, value: string | undefined = undefined) => {
     setStyle(aCommandName, showUI, value);
   };
-  const swapToDiv = (editor: HTMLElement) => {
-    if (editor.childNodes[0]?.nodeName === '#text') {
-      const str = editor.childNodes[0].nodeValue;
-      const p = document.createElement(defaultTagSeparator);
-      if (str) p.append(str);
-      editor.appendChild(p);
-      editor.childNodes[0].remove();
-      var range, selection;
-      if (document.createRange) {
-        //Firefox, Chrome, Opera, Safari, IE 9+
-        range = document.createRange(); //Create a range (a range is a like the selection but invisible)
-        range.selectNodeContents(editor); //Select the entire contents of the element with the range
-        range?.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
-        selection = window.getSelection(); //get the selection object (allows you to change selection)
-        selection?.removeAllRanges(); //remove any selections already made
-        selection?.addRange(range); //make the range you have just created the visible selection
-      } else if ((document as any).selection) {
-        //IE 8 and lower
-        range = (document.body as any).createTextRange(); //Create a range (a range is a like the selection but invisible)
-        range.moveToElementText(editor); //Select the entire contents of the element with the range
-        range.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
-        range.select(); //Select the range (make it the visible selection
-      }
-    }
-  };
+
   const checkStyle = () => {
     toggleCurrentStyles();
     // contentEditable의 첫 번째 child를 수정합니다.
@@ -98,43 +100,11 @@ const BlockEditor = ({}: Props) => {
     }
   };
 
-  // 모든 스타일을 가져와서 버튼을 활성화/비활성화 합니다.
-  const toggleCurrentStyles = () => {
-    const styleList = Object.values(ButtonStyle);
-    styleList.forEach((val) => {
-      const element = document.getElementById(getButtonId(val));
-      if (document.queryCommandState(val)) {
-        element?.classList.add(`${getButtonActiveStyle()}`);
-      } else {
-        element?.classList.remove(`${getButtonActiveStyle()}`);
-      }
-    });
-    // foreColor 코드
-    var node: any = window.getSelection()?.focusNode?.parentNode;
-    while (node?.id !== 'editor' && node?.attributes?.color?.value === undefined) {
-      node = node?.parentNode;
-      if (node === undefined || node === null) break;
-    }
-
-    const selectionAreaForeColor = node?.attributes?.color?.value ?? '#000000';
-    const foreColorElement = document.getElementById(`btn_foreColor`);
-    if (foreColorElement) foreColorElement.style['color'] = selectionAreaForeColor === 'rgb(255, 255, 255)' ? '#000000' : selectionAreaForeColor;
-
-    // hiliteColor 코드
-    // 가장 가까운 부모의 background-color attribute를 얻는 코드
-    var node: any = window.getSelection()?.focusNode?.parentNode;
-    while (node?.id !== 'editor' && node?.attributes?.style?.value === undefined) {
-      node = node?.parentNode;
-      if (node === undefined || node === null) break;
-    }
-
-    const selectionAreaBackColor = node?.attributes?.style?.value?.substr(18)?.replace(';', '') ?? '#000000';
-    const backColorElement = document.getElementById(`btn_hiliteColor`);
-    if (backColorElement) backColorElement.style['color'] = selectionAreaBackColor === 'rgb(255, 255, 255)' ? '#000000' : selectionAreaBackColor;
-  };
-
+  /**
+   * Excute when key down in editor container Editor commands
+   * @param e
+   */
   const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    checkStyle();
     const editor = document.getElementById('editor');
     if (e.key === 'Enter' && e.shiftKey.valueOf() == false) {
       if (editor) swapToDiv(editor); // First child를 div안에 넣는 코드
@@ -203,7 +173,6 @@ const BlockEditor = ({}: Props) => {
 
   const rerenderWithBlocks = (blocks: Block[]) => {
     setRenderingBlocks(blocks);
-    console.log(blocks);
     rerenderRef.current++;
   };
 
@@ -226,18 +195,18 @@ const BlockEditor = ({}: Props) => {
             <Droppable droppableId="edit_block_droppable">
               {(provided) => (
                 <div id="editor_container" ref={provided.innerRef} {...provided.droppableProps}>
-                  {renderingBlocks.map((val, index) => (
+                  {renderingBlocks.map((renderedBlock, index) => (
                     <EditableBlock
-                      key={`${val.index}-`}
-                      draggableId={`draggableId_${val.index}`}
+                      key={`${renderedBlock.index}-`}
+                      draggableId={`draggableId_${renderedBlock.index}`}
                       index={index}
-                      block={val.value}
+                      block={renderedBlock.value}
                       selected={selectedBlock === index}
                       data={(innerHTML: string, re?: boolean) => {
                         var newBlocks = renderingBlocks;
-                        console.log('AFTER', innerHTML);
-                        newBlocks = newBlocks.map((v, i) => (v.index === val.index ? { ...v, value: innerHTML } : v));
+                        newBlocks = newBlocks.map((v, i) => (v.index === renderedBlock.index ? { ...v, value: innerHTML } : v));
                         setBlocks(newBlocks);
+                        console.log('Block rendering index is:', renderedBlock.index);
                         if (re === true) rerenderWithBlocks(newBlocks);
                       }}
                       onFocus={onFocusBlock}
