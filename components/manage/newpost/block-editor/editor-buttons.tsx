@@ -11,7 +11,10 @@ import FontDownloadIcon from '@mui/icons-material/FontDownload';
 import FormatAlignLeftIcon from '@mui/icons-material/FormatAlignLeft';
 import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
 import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
+import SubscriptIcon from '@mui/icons-material/Subscript';
+import SuperscriptIcon from '@mui/icons-material/Superscript';
 import ColorLens from '../../../common/color/color-picker';
+import { ButtonStyle } from './enums/button-type.enum';
 
 interface Props {
   onClickEditButton: (aCommandName: string, showUI?: boolean | undefined, value?: string | undefined) => void;
@@ -23,6 +26,7 @@ interface Props {
 }
 
 export const getButtonActiveStyle = () => styles.active;
+export const getButtonId = (style: ButtonStyle): string => `id_${style}`;
 
 const EditorButtons = ({ onClickEditButton, focusEditor, foreColorPicker, setForeColorPicker, backColorPicker, setBackColorPicker }: Props) => {
   const insertImageDate = (file: any) => {
@@ -76,41 +80,57 @@ const EditorButtons = ({ onClickEditButton, focusEditor, foreColorPicker, setFor
             active={backColorPicker}
           />
         </button>
-        <button id="btn_justifyLeft" className={styles.btn_bold} onClick={() => onClickEditButton('justifyLeft')}>
+        <button id={getButtonId(ButtonStyle.justifyLeft)} className={styles.btn_bold} onClick={() => onClickEditButton(ButtonStyle.justifyLeft)}>
           <FormatAlignLeftIcon />
           <span className={styles.tooltiptext}>좌측 정렬</span>
         </button>
-        <button id="btn_justifyCenter" className={styles.btn_bold} onClick={() => onClickEditButton('justifyCenter')}>
+        <button id={getButtonId(ButtonStyle.justifyCenter)} className={styles.btn_bold} onClick={() => onClickEditButton(ButtonStyle.justifyCenter)}>
           <FormatAlignCenterIcon />
           <span className={styles.tooltiptext}>중앙 정렬</span>
         </button>
-        <button id="btn_justifyRight" className={styles.btn_bold} onClick={() => onClickEditButton('justifyRight')}>
+        <button id={getButtonId(ButtonStyle.justifyRight)} className={styles.btn_bold} onClick={() => onClickEditButton(ButtonStyle.justifyRight)}>
           <FormatAlignRightIcon />
           <span className={styles.tooltiptext}>우측 정렬</span>
         </button>
       </div>
       <div className={styles.menu}>
-        <button id="btn_bold" className={styles.btn_bold} onClick={() => onClickEditButton('bold')}>
+        <button id={getButtonId(ButtonStyle.bold)} className={styles.btn_bold} onClick={() => onClickEditButton(ButtonStyle.bold)}>
           <FormatBoldIcon />
           <span className={styles.tooltiptext}>굵기</span>
         </button>
-        <button id="btn_italic" className={styles.btn_italic} onClick={() => onClickEditButton('italic')}>
+        <button id={getButtonId(ButtonStyle.italic)} className={styles.btn_italic} onClick={() => onClickEditButton(ButtonStyle.italic)}>
           <FormatItalicIcon />
           <span className={styles.tooltiptext}>기울이기</span>
         </button>
-        <button id="btn_underline" className={styles.btn_underline} onClick={() => onClickEditButton('underline')}>
+        <button id={getButtonId(ButtonStyle.underline)} className={styles.btn_underline} onClick={() => onClickEditButton(ButtonStyle.underline)}>
           <FormatUnderlinedIcon />
           <span className={styles.tooltiptext}>밑줄</span>
         </button>
-        <button id="btn_strikeThrough" className={styles.btn_strike} onClick={() => onClickEditButton('strikeThrough')}>
+        <button id={getButtonId(ButtonStyle.strikeThrough)} className={styles.btn_strike} onClick={() => onClickEditButton(ButtonStyle.strikeThrough)}>
           <StrikethroughSIcon />
           <span className={styles.tooltiptext}>취소선</span>
         </button>
-        <button id="btn_insertOrderedList" className={styles.btn_ordered_list} onClick={() => onClickEditButton('insertOrderedList')}>
+        <button id={getButtonId(ButtonStyle.subscript)} className={styles.btn_subscript} onClick={() => onClickEditButton(ButtonStyle.subscript)}>
+          <SubscriptIcon />
+          <span className={styles.tooltiptext}>Subscript</span>
+        </button>
+        <button id={getButtonId(ButtonStyle.superscript)} className={styles.btn_superscript} onClick={() => onClickEditButton(ButtonStyle.superscript)}>
+          <SuperscriptIcon />
+          <span className={styles.tooltiptext}>Superscript</span>
+        </button>
+        <button
+          id={getButtonId(ButtonStyle.insertOrderedList)}
+          className={styles.btn_ordered_list}
+          onClick={() => onClickEditButton(ButtonStyle.insertOrderedList)}
+        >
           <FormatListNumberedIcon />
           <span className={styles.tooltiptext}>순서 있는 리스트</span>
         </button>
-        <button id="btn_insertUnorderedList" className={styles.btn_unordered_list} onClick={() => onClickEditButton('insertUnorderedList')}>
+        <button
+          id={getButtonId(ButtonStyle.insertUnorderedList)}
+          className={styles.btn_unordered_list}
+          onClick={() => onClickEditButton(ButtonStyle.insertUnorderedList)}
+        >
           <FormatListBulletedIcon />
           <span className={styles.tooltiptext}>순서 없는 리스트</span>
         </button>

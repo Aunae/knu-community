@@ -1,23 +1,12 @@
 'use client';
 import styles from './block-editor.module.scss';
 import React, { useEffect, useRef, useState } from 'react';
-import EditorButtons, { getButtonActiveStyle } from './editor-buttons';
+import EditorButtons, { getButtonActiveStyle, getButtonId } from './editor-buttons';
 import EditableBlock from './editable-block';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { useStrictDroppable } from '../../../hooks/useStrictDroppable';
 import AddIcon from '@mui/icons-material/Add';
-
-enum ButtonStyle {
-  bold = 'bold',
-  italic = 'italic',
-  underline = 'underline',
-  strikeThrough = 'strikeThrough',
-  insertOrderedList = 'insertOrderedList',
-  insertUnorderedLis = 'insertUnorderedList',
-  justifyLeft = 'justifyLeft',
-  justifyCenter = 'justifyCenter',
-  justifyRight = 'justifyRight',
-}
+import { ButtonStyle } from './enums/button-type.enum';
 
 const defaultTagSeparator = 'div';
 
@@ -113,7 +102,7 @@ const BlockEditor = ({}: Props) => {
   const toggleCurrentStyles = () => {
     const styleList = Object.values(ButtonStyle);
     styleList.forEach((val) => {
-      const element = document.getElementById(`btn_${val}`);
+      const element = document.getElementById(getButtonId(val));
       if (document.queryCommandState(val)) {
         element?.classList.add(`${getButtonActiveStyle()}`);
       } else {
