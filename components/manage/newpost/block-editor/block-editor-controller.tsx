@@ -12,7 +12,7 @@ const defaultTagSeparator = 'div';
 
 interface Block {
   value: string;
-  index: number;
+  id: number;
 }
 
 export const getInnerHTML = (collection: HTMLCollection) => {
@@ -58,11 +58,10 @@ type Props = {};
 
 // TODO: ondrag일 때 블럭을 delete할 수 있는 코드를 구현해야합니다.
 // TODO: delete 이후에 Undo 기능을 구현해야합니다. (history)
-const BlockEditor = ({}: Props) => {
+const BlockEditorController = ({}: Props) => {
   const [foreColorPicker, setForeColorPicker] = useState(false);
   const [backColorPicker, setBackColorPicker] = useState(false);
   const blockCount = useRef(0);
-  const rerenderRef = useRef(0);
   const [blocks, setBlocks] = useState<Block[]>([]); // 매 이벤트마다 변경되는 데이터
   const [renderingBlocks, setRenderingBlocks] = useState<Block[]>([]); // 렌더링 될 때만 적용되는 데이터
   const [selectedBlock, setSelectedBlock] = useState(0);
@@ -70,7 +69,7 @@ const BlockEditor = ({}: Props) => {
 
   useEffect(() => {
     document.execCommand('defaultParagraphSeparator', false, defaultTagSeparator);
-    addNewBlock();
+    addBlock();
   }, []);
 
   // TODO: fore, back color picker
@@ -113,7 +112,7 @@ const BlockEditor = ({}: Props) => {
       e.preventDefault();
       if (editor) {
         const index = parseInt(editor.accessKey);
-        addNewBlock(index);
+        addBlock(index);
       }
     }
   };
@@ -156,14 +155,14 @@ const BlockEditor = ({}: Props) => {
     document.execCommand('justifyLeft');
   };
 
-  const addNewBlock = (index?: number) => {
+  const addBlock = (index?: number) => {
     var tmp: Block[] = [];
     if (index === null || index === undefined) {
       tmp.push(...blocks);
-      tmp.push({ index: blockCount.current, value: '' });
+      tmp.push({ id: blockCount.current, value: '' });
     } else {
       tmp.push(...blocks);
-      tmp.splice(index + 1, 0, { index: blockCount.current, value: '' });
+      tmp.splice(index + 1, 0, { id: blockCount.current, value: '' });
       setSelectedBlock(index + 1);
     }
     blockCount.current += 1;
@@ -171,10 +170,15 @@ const BlockEditor = ({}: Props) => {
     setRenderingBlocks(tmp);
   };
 
-  const rerenderWithBlocks = (blocks: Block[]) => {
-    setRenderingBlocks(blocks);
-    rerenderRef.current++;
+  const deleteBlock = (index: string) => {};
+
+  const onBlockChange = (innerHTML: string, index: number) => {
+    setBlocks((prev) => prev.map((block, i) => (i === index ? { ...block, value: innerHTML } : { ...block })));
   };
+  const onBlockClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => {
+    setSelectedBlock(index);
+  };
+  const onBlockCommand = (e: React.KeyboardEvent<HTMLDivElement>) => {};
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -186,7 +190,7 @@ const BlockEditor = ({}: Props) => {
         />
         <div id="send_editor_container" style={{ display: 'none' }}>
           {blocks.map((block) => (
-            <div dangerouslySetInnerHTML={{ __html: block.value ?? '' }} />
+            <div dangerouslySetInnerHTML={{ __html: block.value }} />
           ))}
         </div>
         <div className={styles.editor_container}>
@@ -197,20 +201,15 @@ const BlockEditor = ({}: Props) => {
                 <div id="editor_container" ref={provided.innerRef} {...provided.droppableProps}>
                   {renderingBlocks.map((renderedBlock, index) => (
                     <EditableBlock
-                      key={`${renderedBlock.index}-`}
-                      draggableId={`draggableId_${renderedBlock.index}`}
+                      key={`${renderedBlock.id}-`}
+                      draggableId={`draggableId_${renderedBlock.id}`}
+                      onBlockChange={onBlockChange}
+                      onBlockClick={onBlockClick}
+                      onBlockCommand={onBlockCommand}
                       index={index}
-                      block={renderedBlock.value}
+                      id={renderedBlock.id}
                       selected={selectedBlock === index}
-                      data={(innerHTML: string, re?: boolean) => {
-                        var newBlocks = renderingBlocks;
-                        newBlocks = newBlocks.map((v, i) => (v.index === renderedBlock.index ? { ...v, value: innerHTML } : v));
-                        setBlocks(newBlocks);
-                        console.log('Block rendering index is:', renderedBlock.index);
-                        if (re === true) rerenderWithBlocks(newBlocks);
-                      }}
-                      onFocus={onFocusBlock}
-                      rerenderRef={rerenderRef.current}
+                      block={renderedBlock.value}
                       {...{ checkStyle, closeColorPickers, onKeyDown }}
                     />
                   ))}
@@ -219,7 +218,7 @@ const BlockEditor = ({}: Props) => {
               )}
             </Droppable>
           )}
-          <div className={styles.editor_add_block} onClick={() => addNewBlock()}>
+          <div className={styles.editor_add_block} onClick={() => addBlock()}>
             <AddIcon />
           </div>
         </div>
@@ -228,4 +227,4 @@ const BlockEditor = ({}: Props) => {
   );
 };
 
-export default BlockEditor;
+export default BlockEditorController;

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import BlockEditor from './block-editor/block-editor';
+import BlockEditorController from './block-editor/block-editor-controller';
 import Editor from './editor';
 import styles from './newpost.module.scss';
 
@@ -54,7 +54,7 @@ const NewPost = () => {
             }
           }}
         ></textarea>
-        {false ? <Editor /> : <BlockEditor />}
+        {false ? <Editor /> : <BlockEditorController />}
         <div className={styles.submit_area}>
           <button className={styles.submit_button} disabled={submitDisabled} onClick={onClick}>
             등록
