@@ -24,10 +24,6 @@ export const getInnerHTML = (collection: HTMLCollection) => {
   return htmlString;
 };
 
-export const focusEditor = () => {
-  document.getElementById('editor')?.focus({ preventScroll: true });
-};
-
 export const swapToDiv = (editor: HTMLElement) => {
   if (editor.childNodes[0]?.nodeName === '#text') {
     const str = editor.childNodes[0].nodeValue;
@@ -66,23 +62,54 @@ const BlockEditorController = ({}: Props) => {
   const [renderingBlocks, setRenderingBlocks] = useState<Block[]>([]); // 렌더링 될 때만 적용되는 데이터
   const [selectedBlock, setSelectedBlock] = useState(0);
   const [enabled] = useStrictDroppable(false);
+  const [fontSize, setFontSize] = useState(3);
+  const [__latestCommand, __setLatestCommand] = useState<string>('_'); // dev
 
   useEffect(() => {
     document.execCommand('defaultParagraphSeparator', false, defaultTagSeparator);
+    const dev_console = (e: any) => {
+      const selection = window.getSelection();
+      if (selection) {
+        const range: Range = selection.getRangeAt(0);
+        console.log(range.startOffset, range.endOffset, selection.focusNode, selection.rangeCount);
+
+        if (e?.key === 'q' && selection.focusNode) {
+          e.preventDefault();
+          const newRange: Range = document.createRange();
+          newRange.selectNode(selection.focusNode);
+          newRange.setStart(selection.focusNode, 1);
+          newRange.setEnd(selection.focusNode, 1);
+          selection.removeAllRanges();
+          selection.addRange(newRange);
+          // range.deleteContents();
+        }
+      }
+    };
+    // window.addEventListener('click', dev_console, false);
+    // window.addEventListener('keydown', dev_console, false);
     addBlock();
+    return () => {
+      // window.removeEventListener('click', dev_console, false);
+      // window.removeEventListener('keydown', dev_console, false);
+    };
   }, []);
 
   // TODO: fore, back color picker
   const setStyle = (aCommandName: string, showUI: boolean | undefined = undefined, value: string | undefined = undefined) => {
     document.execCommand(aCommandName, showUI, value);
-    // editor에 focus를 둡니다.
-    focusEditor();
     // 글의 상태를 옵션 UI에 업데이트합니다.
     checkStyle();
   };
 
+  // Editor menus를 조작하는 function들
   const onClickEditButton = (aCommandName: string, showUI: boolean | undefined = undefined, value: string | undefined = undefined) => {
     setStyle(aCommandName, showUI, value);
+  };
+
+  const onSelectFontSize = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const size = parseInt(e.target.value);
+    setFontSize(size);
+    document.execCommand('fontSize', false, `${size}`);
   };
 
   const checkStyle = () => {
@@ -100,21 +127,21 @@ const BlockEditorController = ({}: Props) => {
   };
 
   /**
-   * Excute when key down in editor container Editor commands
+   * deprecated - Excute when key down in editor container Editor commands
    * @param e
    */
   const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    const editor = document.getElementById('editor');
-    if (e.key === 'Enter' && e.shiftKey.valueOf() == false) {
-      if (editor) swapToDiv(editor); // First child를 div안에 넣는 코드
-    }
-    if (e.key === 'Enter' && e.shiftKey.valueOf() == true) {
-      e.preventDefault();
-      if (editor) {
-        const index = parseInt(editor.accessKey);
-        addBlock(index);
-      }
-    }
+    // const editor = document.getElementById('editor');
+    // if (e.key === 'Enter' && e.shiftKey.valueOf() == false) {
+    //   if (editor) swapToDiv(editor); // First child를 div안에 넣는 코드
+    // }
+    // if (e.key === 'Enter' && e.shiftKey.valueOf() == true) {
+    //   e.preventDefault();
+    //   if (editor) {
+    //     const index = parseInt(editor.accessKey);
+    //     addBlock(index);
+    //   }
+    // }
   };
 
   const closeColorPickers = () => {
@@ -170,27 +197,45 @@ const BlockEditorController = ({}: Props) => {
     setRenderingBlocks(tmp);
   };
 
-  const deleteBlock = (index: string) => {};
+  const deleteBlock = (index: number) => {
+    if (index < 0) return undefined;
+    var tmp: Block[] = blocks;
+    tmp.splice(index, 1);
+    setBlocks(tmp);
+    setRenderingBlocks(tmp);
+  };
 
   const onBlockChange = (innerHTML: string, index: number) => {
+    checkStyle();
     setBlocks((prev) => prev.map((block, i) => (i === index ? { ...block, value: innerHTML } : { ...block })));
   };
   const onBlockClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => {
+    checkStyle();
     setSelectedBlock(index);
   };
-  const onBlockCommand = (e: React.KeyboardEvent<HTMLDivElement>) => {};
+
+  const onBlockCommand = (command: string, state: string, index: number) => {
+    // 빈 Editor에 Basckspace를 하면 블럭 사라짐
+    if (command === 'Backspace' && state.trim() === '' && blocks.length !== 1) deleteBlock(index);
+    if (command === 'Shift + Enter') {
+      addBlock(index);
+    }
+    __setLatestCommand(command);
+  };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className={styles.container}>
         <EditorButtons
+          fontSize={fontSize}
+          onSelectFontSize={onSelectFontSize}
           onClickEditButton={onClickEditButton}
-          focusEditor={focusEditor}
           {...{ foreColorPicker, setForeColorPicker, backColorPicker, setBackColorPicker }}
         />
+        <div style={{ position: 'absolute', left: '0' }}>{__latestCommand}</div>
         <div id="send_editor_container" style={{ display: 'none' }}>
           {blocks.map((block) => (
-            <div dangerouslySetInnerHTML={{ __html: block.value }} />
+            <div key={block.id} dangerouslySetInnerHTML={{ __html: block.value }} />
           ))}
         </div>
         <div className={styles.editor_container}>

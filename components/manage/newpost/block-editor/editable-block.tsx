@@ -9,7 +9,7 @@ import { isParentHasTagName } from './editor-buttons';
 interface Props {
   onBlockChange: (innerHTML: string, index: number) => void;
   onBlockClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => void;
-  onBlockCommand: (e: React.KeyboardEvent<HTMLDivElement>) => void;
+  onBlockCommand: (command: string, value: string, index: number) => void;
   draggableId: string;
   index: number;
   id: number;
@@ -58,7 +58,23 @@ const EditableBlock = ({ draggableId, index, selected, block, onBlockChange, onB
       onBlockChange(ref.current.innerHTML, index);
     }
   }; // Text modified event
-  const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {}; // Command event
+  const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const command = handleKeyCommand(e);
+    if (command && ref.current) onBlockCommand(command, ref.current.innerHTML, index);
+  }; // Command event
+  const handleKeyCommand = (e: React.KeyboardEvent<any>): string | null => {
+    const shift: boolean = e.shiftKey.valueOf();
+    const ctrl: boolean = e.ctrlKey.valueOf();
+    const key: string = e.code;
+    if (shift === false && ctrl === false && key === 'Space') return 'Space';
+    if (shift === false && ctrl === false && key === 'Backspace') return 'Backspace';
+    if (shift === false && ctrl === false && (key === 'Enter' || key === 'NumpadEnter')) return 'Enter';
+    if (shift === true && ctrl === false && key === 'Enter') return `Shift + Enter`;
+    if (shift === false && ctrl === true && key === 'KeyB') return 'bold';
+    if (shift === false && ctrl === true && key === 'KeyI') return 'italic';
+    if (shift === false && ctrl === true && key === 'KeyU') return 'underline';
+    return null;
+  };
   const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     // Click event
     onBlockClick(e, index);

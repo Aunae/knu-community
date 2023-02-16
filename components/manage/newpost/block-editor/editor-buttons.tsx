@@ -16,14 +16,6 @@ import SuperscriptIcon from '@mui/icons-material/Superscript';
 import ColorLens from '../../../common/color/color-picker';
 import { ButtonStyle } from './enums/button-type.enum';
 
-interface Props {
-  onClickEditButton: (aCommandName: string, showUI?: boolean | undefined, value?: string | undefined) => void;
-  focusEditor: () => void;
-  foreColorPicker: boolean;
-  setForeColorPicker: (val: boolean) => void;
-  backColorPicker: boolean;
-  setBackColorPicker: (val: boolean) => void;
-}
 export const isParentHasTagName = (node: any, tagName: string, lastParentNodeId: string = 'editor'): boolean => {
   while (node !== undefined && node !== null && node.id !== lastParentNodeId) {
     if (node.tagName === tagName.toUpperCase()) return true;
@@ -43,6 +35,7 @@ const isSuperscriptOnFocus = (): boolean => {
   return isParentHasTagName(node, 'SUP');
 };
 export const getButtonId = (style: ButtonStyle): string => `id_${style}`;
+
 // 모든 스타일을 가져와서 버튼을 활성화/비활성화 합니다.
 export const toggleCurrentStyles = () => {
   const styleList = Object.values(ButtonStyle);
@@ -91,13 +84,28 @@ export const toggleCurrentStyles = () => {
   if (backColorElement) backColorElement.style['color'] = selectionAreaBackColor === 'rgb(255, 255, 255)' ? '#000000' : selectionAreaBackColor;
 };
 
-const EditorButtons = ({ onClickEditButton, focusEditor, foreColorPicker, setForeColorPicker, backColorPicker, setBackColorPicker }: Props) => {
+// const fontSizeList: number[] = [6, 7, 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 28, 32, 36, 40, 44, 48, 52, 60, 64, 72, 80];
+const fontSizeList: number[] = [1, 2, 3, 4, 5, 6, 7];
+
+/**
+ * EditorButtons properties
+ */
+interface Props {
+  onClickEditButton: (aCommandName: string, showUI?: boolean | undefined, value?: string | undefined) => void;
+  foreColorPicker: boolean;
+  setForeColorPicker: (val: boolean) => void;
+  backColorPicker: boolean;
+  setBackColorPicker: (val: boolean) => void;
+  onSelectFontSize: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  fontSize: number;
+}
+
+const EditorButtons = ({ onClickEditButton, foreColorPicker, setForeColorPicker, backColorPicker, setBackColorPicker, onSelectFontSize, fontSize }: Props) => {
   const insertImageDate = (file: any) => {
     const reader = new FileReader();
     console.log('reader: ', reader);
     reader.addEventListener('load', function (e) {
       console.log('reader eventListener called');
-      focusEditor();
       document.execCommand('insertImage', false, `${reader.result}`);
     });
     reader.readAsDataURL(file);
@@ -129,7 +137,7 @@ const EditorButtons = ({ onClickEditButton, focusEditor, foreColorPicker, setFor
             active={foreColorPicker}
           />
         </button>
-        <button id="btn_hiliteColor" className={styles.btn_bold} onFocus={() => setBackColorPicker(true)} onClick={() => onClickEditButton('')}>
+        <button id="btn_hiliteColor" className={styles.btn} onFocus={() => setBackColorPicker(true)} onClick={() => onClickEditButton('')}>
           <FontDownloadIcon />
           <span className={styles.tooltiptext}>폰트배경색상</span>
           <ColorLens
@@ -143,21 +151,28 @@ const EditorButtons = ({ onClickEditButton, focusEditor, foreColorPicker, setFor
             active={backColorPicker}
           />
         </button>
-        <button id={getButtonId(ButtonStyle.justifyLeft)} className={styles.btn_bold} onClick={() => onClickEditButton(ButtonStyle.justifyLeft)}>
+        <button id={getButtonId(ButtonStyle.justifyLeft)} className={styles.btn} onClick={() => onClickEditButton(ButtonStyle.justifyLeft)}>
           <FormatAlignLeftIcon />
           <span className={styles.tooltiptext}>좌측 정렬</span>
         </button>
-        <button id={getButtonId(ButtonStyle.justifyCenter)} className={styles.btn_bold} onClick={() => onClickEditButton(ButtonStyle.justifyCenter)}>
+        <button id={getButtonId(ButtonStyle.justifyCenter)} className={styles.btn} onClick={() => onClickEditButton(ButtonStyle.justifyCenter)}>
           <FormatAlignCenterIcon />
           <span className={styles.tooltiptext}>중앙 정렬</span>
         </button>
-        <button id={getButtonId(ButtonStyle.justifyRight)} className={styles.btn_bold} onClick={() => onClickEditButton(ButtonStyle.justifyRight)}>
+        <button id={getButtonId(ButtonStyle.justifyRight)} className={styles.btn} onClick={() => onClickEditButton(ButtonStyle.justifyRight)}>
           <FormatAlignRightIcon />
           <span className={styles.tooltiptext}>우측 정렬</span>
         </button>
+        <select value={fontSize} onChange={onSelectFontSize}>
+          {fontSizeList.map((size) => (
+            <option key={size} value={size}>
+              {size}
+            </option>
+          ))}
+        </select>
       </div>
       <div className={styles.menu}>
-        <button id={getButtonId(ButtonStyle.bold)} className={styles.btn_bold} onClick={() => onClickEditButton(ButtonStyle.bold)}>
+        <button id={getButtonId(ButtonStyle.bold)} className={styles.btn} onClick={() => onClickEditButton(ButtonStyle.bold)}>
           <FormatBoldIcon />
           <span className={styles.tooltiptext}>굵기</span>
         </button>
