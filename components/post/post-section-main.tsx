@@ -1,7 +1,7 @@
 'use client';
-import { Post } from '@prisma/client';
+
 import axios from 'axios';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
 import PostComponent from './post-item';
 import PostSectionPageNumber from './post-section-page-number';

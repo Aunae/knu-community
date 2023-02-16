@@ -1,11 +1,13 @@
 .container {
-  width: 100%;
+  width: 900px;
   height: 100vh;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  border: 1px solid var(--text);
+  // border: 1px solid var(--text);
+  box-shadow: 0 0 32px rgba(0, 0, 0, 0.1);
   .title {
     display: block;
     width: 100%;
@@ -24,8 +26,16 @@
     font-weight: 400;
     height: 40px;
   }
-  &>button {
-    border: 1px solid var(--text);
-    background-color: var(--black-alpha-5);
+}
+
+.submit_area {
+  width: 100%;
+  .submit_button {
+    width: 100%;
+    padding: 1.25rem 1rem;
+    background-color: var(--primary-3);
+    color: var(--primary-text);
+    font-weight: 700;
+    font-size: 1.125rem;
   }
 }
