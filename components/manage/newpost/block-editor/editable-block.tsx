@@ -1,66 +1,39 @@
 'use client';
 
 import React, { useEffect, useState, useRef } from 'react';
-import { Draggable } from 'react-beautiful-dnd';
 import styles from './editable-block.module.scss';
-import MenuOpenIcon from '@mui/icons-material/MenuOpen';
-import { autoEditorCommands } from './editor-command/editor-command';
-import { isParentHasTagName } from './editor-buttons';
 interface Props {
-  onBlockChange: (innerHTML: string, index: number) => void;
-  onBlockClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => void;
-  onBlockCommand: (command: string, value: string, index: number) => void;
-  draggableId: string;
-  index: number;
-  id: number;
-  selected: boolean;
-  block: string;
+  onStateChange: (innerHTML: string) => void;
+  onEditorClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  onEditorCommand: (command: string, value: string) => void;
+  onEditorBlur?: () => void;
+  onEditorFocus?: () => void;
+  state: string;
+  placeholder: string;
 }
 
-const ContentTag = ({ tagName, children, onClick, ...props }: { onClick: (e: any) => void; tagName?: string; children: React.ReactNode }) => {
-  if (tagName === 'h1')
-    return (
-      <h1 style={{ width: '100%' }} onClick={onClick} {...props}>
-        {children}
-      </h1>
-    );
-  if (tagName === 'h2')
-    return (
-      <h2 style={{ width: '100%' }} onClick={onClick} {...props}>
-        {children}
-      </h2>
-    );
-  if (tagName === 'h3')
-    return (
-      <h3 style={{ width: '100%' }} onClick={onClick} {...props}>
-        {children}
-      </h3>
-    );
-  return (
-    <div style={{ width: '100%' }} onClick={onClick} {...props}>
-      {children}
-    </div>
-  );
-};
-
-const EditableBlock = ({ draggableId, index, selected, block, onBlockChange, onBlockClick, onBlockCommand }: Props) => {
-  const [value, setValue] = useState<string>(' ');
+const EditorContent = ({ placeholder, state, onStateChange, onEditorBlur, onEditorFocus, onEditorClick, onEditorCommand }: Props) => {
+  const [text, setText] = useState<string>(placeholder);
+  const [renderedText, setRenderedText] = useState<string>(placeholder);
   const [tag, setTag] = useState<any>('div');
   const ref = useRef<HTMLDivElement>(null);
+  const [range, setRange] = useState<Range | null>();
+  const isPlaceholder = placeholder === renderedText;
 
   useEffect(() => {
-    console.log('a', block);
-    if (block) setValue(block);
-  }, [block]);
+    if (state) setText(state);
+  }, [state]);
 
   const onInput = (e: React.FormEvent<HTMLDivElement>) => {
     if (ref.current) {
-      onBlockChange(ref.current.innerHTML, index);
+      onStateChange(ref.current.innerHTML);
+      setText(ref.current.innerHTML);
+      // console.log(`"${window.getSelection()?.focusNode?.textContent}"`);
     }
   }; // Text modified event
   const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     const command = handleKeyCommand(e);
-    if (command && ref.current) onBlockCommand(command, ref.current.innerHTML, index);
+    if (command && ref.current) onEditorCommand(command, ref.current.innerHTML);
   }; // Command event
   const handleKeyCommand = (e: React.KeyboardEvent<any>): string | null => {
     const shift: boolean = e.shiftKey.valueOf();
@@ -77,32 +50,36 @@ const EditableBlock = ({ draggableId, index, selected, block, onBlockChange, onB
   };
   const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     // Click event
-    onBlockClick(e, index);
+    onEditorClick(e);
+  };
+
+  const onFocus = () => {
+    if (renderedText === placeholder) setRenderedText('');
+  };
+
+  const onBlur = () => {
+    setRenderedText(text);
+    if (text === '') setRenderedText(placeholder);
   };
 
   return (
-    <Draggable draggableId={draggableId} index={index}>
-      {(provided) => (
-        <div className={styles.item} ref={provided.innerRef} {...provided.draggableProps}>
-          <div {...provided.dragHandleProps} className={styles.draggable}>
-            <MenuOpenIcon />
-          </div>
-          <ContentTag tagName={tag} onClick={onClick}>
-            <div
-              accessKey={`${index}`}
-              className={`${styles.editor} custom_editor`}
-              contentEditable={true}
-              suppressContentEditableWarning={true}
-              ref={ref}
-              onInput={onInput}
-              dangerouslySetInnerHTML={{ __html: value }}
-              onKeyDown={onKeyDown}
-            />
-          </ContentTag>
-        </div>
-      )}
-    </Draggable>
+    <div className={styles.item}>
+      <div
+        onClick={onClick}
+        placeholder={placeholder}
+        id="editor"
+        className={`${styles.editor} custom_editor ${isPlaceholder ? styles.placeholder : ''}`}
+        contentEditable={true}
+        suppressContentEditableWarning={true}
+        ref={ref}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        onInput={onInput}
+        dangerouslySetInnerHTML={{ __html: renderedText }}
+        onKeyDown={onKeyDown}
+      />
+    </div>
   );
 };
 
-export default EditableBlock;
+export default EditorContent;

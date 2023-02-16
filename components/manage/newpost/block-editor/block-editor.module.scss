@@ -1,6 +1,8 @@
 .container {
+  flex-grow: 1;
   width: 100%;
   height: calc(100% - 64px);
+  max-height: calc(100% - 64px);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -29,8 +31,7 @@
 
 .editor_container {
   flex-grow: 1;
-  height: fit-content;
-  min-height: 100px;
+  height: 100px;
   // padding-bottom: 10rem;
   overflow-y: scroll;
 }

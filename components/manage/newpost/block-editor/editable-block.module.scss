@@ -8,9 +8,14 @@
 
 .editor {
   width: 100%;
+  padding: 0 1rem 15rem;
   &:focus {
     outline: 0;
   }
+}
+
+.placeholder {
+  color: var(--black-alpha-2)
 }
 
 .draggable {
