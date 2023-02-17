@@ -43,9 +43,14 @@ const EditorContent = ({ placeholder, state, onStateChange, onEditorBlur, onEdit
     if (shift === false && ctrl === false && key === 'Backspace') return 'Backspace';
     if (shift === false && ctrl === false && (key === 'Enter' || key === 'NumpadEnter')) return 'Enter';
     if (shift === true && ctrl === false && key === 'Enter') return `Shift + Enter`;
+    if (shift === false && ctrl === true && key === 'Enter') return 'Ctrl + Enter';
     if (shift === false && ctrl === true && key === 'KeyB') return 'bold';
     if (shift === false && ctrl === true && key === 'KeyI') return 'italic';
     if (shift === false && ctrl === true && key === 'KeyU') return 'underline';
+    if (shift === false && ctrl === true && key === 'KeyE') {
+      e.preventDefault();
+      return 'inline-code';
+    }
     return null;
   };
   const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

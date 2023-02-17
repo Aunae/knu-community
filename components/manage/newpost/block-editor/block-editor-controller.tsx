@@ -7,6 +7,8 @@ import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { useStrictDroppable } from '../../../hooks/useStrictDroppable';
 import AddIcon from '@mui/icons-material/Add';
 import { ButtonStyle } from './enums/button-type.enum';
+import { off } from 'process';
+import { createCodeElement, getSelectionAndRange, isNodeIncludeFromTag } from './utils/selection-controller';
 
 const defaultTagSeparator = 'div';
 
@@ -86,14 +88,6 @@ const BlockEditorController = ({}: Props) => {
     toggleCurrentStyles();
     // contentEditable의 첫 번째 child를 수정합니다.
     const editor = document.getElementById('editor');
-    if (editor) {
-      // swapToDiv(editor);
-
-      const ps = editor.getElementsByTagName(defaultTagSeparator);
-      for (let i = 0; i < ps.length; i++) {
-        ps[i].setAttribute('draggable', 'true');
-      }
-    }
   };
 
   const closeColorPickers = () => {
@@ -118,6 +112,51 @@ const BlockEditorController = ({}: Props) => {
 
   const onEditorCommand = (command: string, state: string) => {
     __setLatestCommand(command);
+    if (command === 'inline-code') {
+      // Insert <code>{textContent}<code/>
+      // TODO: If focusNode is <code/>, remove <code/> tag.
+      // TODO: If focusNode have a or mode <code/>, combine into <code/> tag.
+
+      const { selection, focusNode, selectionRange } = getSelectionAndRange();
+      // check selection has <code/> node [if parents has node tag, get <code/> node and then segregate node into <code/> <text/> <code/>]
+      if (selection && selectionRange && focusNode) {
+        if (isNodeIncludeFromTag(focusNode, 'code') === null) {
+          // selection.getRangeAt(0).insertNode(code); // Element is Node, Node is not Element
+          // FIXME: textContent didn't work correctly
+          const textContent = selectionRange.toString();
+          if (!textContent) return;
+          const range: Range = document.createRange();
+          range.selectNode(focusNode);
+          const code = createCodeElement('code', textContent);
+          selectionRange.deleteContents();
+          range.insertNode(code);
+          selection.removeAllRanges();
+          if (code.firstChild) {
+            range.selectNode(code.firstChild);
+            range.setStartBefore(code.firstChild);
+            range.setEndAfter(code.firstChild);
+            selection.addRange(range);
+          }
+        } else {
+          console.log('already code');
+        }
+      }
+    }
+    if (command === 'Ctrl + Enter') {
+      const selection = window.getSelection();
+      const selectionRange = selection?.getRangeAt(0);
+      const focusNode = selection?.focusNode;
+      // console.log(selection?.anchorNode, focusNode);
+      if (selectionRange && focusNode) {
+        // const textContent = focusNode.textContent?.substring(selectionRange.startOffset, selectionRange.endOffset);
+        console.log(selectionRange.startContainer, selectionRange.endContainer);
+        console.log(selectionRange.startOffset, selectionRange.endOffset);
+        // selectionRange.container
+        // text
+        console.log('#text:', selectionRange.toString());
+      }
+      // console.log(isNodeIncludeFromTag(focusNode, 'code'));
+    }
   };
 
   return (
