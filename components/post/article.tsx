@@ -2,7 +2,6 @@ import CommentFloatingButton from './comment-floating-button';
 import { MdAccountCircle as MockIcon, MdComment as CommentIcon, MdMoreVert as CommentOptionIcon, MdThumbUp as LikeIcon } from 'react-icons/md';
 import styles from './article.module.scss';
 import Link from 'next/link';
-
 type Props = {
   post: any;
 };

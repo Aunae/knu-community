@@ -64,12 +64,3 @@ h3 {
   font-size: 1.125rem;
   font-weight: 800;
 }
-
-code {
-  font-family: Consolas;
-  background-color: #afafaf;;
-  color: white;
-  border-radius: 4px;
-  padding: 0 0.125rem;
-  margin: 0 0.125rem;
-}

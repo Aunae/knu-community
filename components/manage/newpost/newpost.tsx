@@ -2,27 +2,29 @@
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import BlockEditorController from './block-editor/block-editor-controller';
-import Editor from './editor';
+import { useEffect, useRef, useState } from 'react';
+import Editor from '@toast-ui/editor';
+import '@toast-ui/editor/dist/toastui-editor.css';
+import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
 import styles from './newpost.module.scss';
 
 const NewPost = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
+  const editorRef = useRef<HTMLDivElement>(null);
   const [title, setTitle] = useState<string>('');
   const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
+  const [editor, setEditor] = useState<Editor | null>(null);
+
   const onClick = () => {
     if (title.trim() === '') return;
     setSubmitDisabled(true);
-    const element = document.getElementById('send_editor_container');
-    if (element?.innerHTML) localStorage.setItem('temp', element.innerHTML);
-    if (session && element) {
+    if (session && editor) {
       const send = async () => {
         const data = await axios
           .post('/api/post', {
             title,
-            content: element.innerHTML,
+            content: editor.getHTML(),
             published: true,
             session,
             category: null,
@@ -37,9 +39,22 @@ const NewPost = () => {
       send();
     }
   };
-  // if (status === 'loading') return <div>로딩중</div>;
-  // if (status === 'unauthenticated') return <div>로그인이 필요합니다.</div>;
-  if (true || status === 'authenticated')
+  useEffect(() => {
+    if (editorRef.current) {
+      const editor = new Editor({
+        el: editorRef.current,
+        previewStyle: 'vertical',
+        height: '100%',
+        initialEditType: 'wysiwyg',
+        initialValue: ' ',
+        useCommandShortcut: true,
+      });
+      setEditor(editor);
+    }
+  }, []);
+  if (status === 'loading') return <div>로딩중</div>;
+  if (status === 'unauthenticated') return <div>로그인이 필요합니다.</div>;
+  if (status === 'authenticated')
     return (
       <div className={styles.container}>
         <textarea
@@ -54,7 +69,7 @@ const NewPost = () => {
             }
           }}
         ></textarea>
-        {false ? <Editor /> : <BlockEditorController />}
+        <div ref={editorRef} className={styles.editor} />
         <div className={styles.submit_area}>
           <button className={styles.submit_button} disabled={submitDisabled} onClick={onClick}>
             등록
