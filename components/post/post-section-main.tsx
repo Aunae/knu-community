@@ -38,6 +38,7 @@ const PostSectionMain = ({}: Props) => {
         },
       })
       .then((res) => res.data);
+    // console.log(res.data.posts);
     setPosts(res.data.posts);
     setPage(page);
     setPageLength(Math.ceil(res.data.count / TAKE_NUM));
@@ -45,15 +46,17 @@ const PostSectionMain = ({}: Props) => {
   };
 
   useEffect(() => {
-    const getPage = params.get('page');
-    if (getPage !== null) {
-      const parsedPage = +getPage;
-      if (!Number.isNaN(parsedPage)) {
-        fetchPosts(parsedPage);
+    if (params !== null && params !== undefined) {
+      const getPage = params.get('page');
+      if (getPage !== null) {
+        const parsedPage = +getPage;
+        if (!Number.isNaN(parsedPage)) {
+          fetchPosts(parsedPage);
+        }
       }
-    }
-    if (getPage === null) {
-      fetchPosts(1);
+      if (getPage === null) {
+        fetchPosts(1);
+      }
     }
   }, [params]);
 

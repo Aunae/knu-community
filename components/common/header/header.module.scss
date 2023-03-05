@@ -1,0 +1,113 @@
+.header {
+  margin: 0 auto;
+  width: 1200px;
+  display: flex;
+  position: static;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  padding: 0.75rem 0;
+
+  form {
+    border: 1px solid #ccc;
+    border-radius: 100000px;
+    height: 2.5rem;
+    width: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem;
+    transition: 0.2s width ease-in-out;
+    &:focus-within{
+      width: 300px;
+    }
+  }
+
+  input {
+    font-size: 0.825rem;
+    width: 100%;
+    padding: 0.125rem 1rem;
+    background: rgba(0, 0, 0, 0);
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.logo {
+  color: black;
+  font-size: 2rem;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: 0.025rem;
+}
+
+.profile_container {
+  position: relative;
+  margin: 1rem;
+  &:hover 
+  .profile_name{
+    display: block;
+  }
+}
+
+.profile_name {
+  display: none;
+  position: absolute;
+  width: fit-content;
+  background-color: rgb(65, 80, 122);
+  color: white;
+  padding: 0.25rem 1rem;
+  bottom:-100%;
+}
+
+.profile {
+  display: block;
+  border: 1px solid #ccc;
+  border-radius: 10000px;
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+
+.header_left {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header_right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.search_icon {
+  font-size: 1.125rem;
+  color: #ccc;
+  padding-right: 0.75rem;
+}
+
+.nav {
+  margin-left: 3rem;
+  &>* {
+    padding: 0.25rem 1rem;
+    font-size: 0.875rem;
+    position: relative;
+    &::after {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      content: '';
+      width: 0;
+      height: 1px;
+      transition: 0.3s ease all;
+      background-color: #aaa;
+    }
+    &:hover {
+      &::after {
+        width: 100%;
+      }
+    }
+  }
+}

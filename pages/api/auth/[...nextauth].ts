@@ -1,6 +1,5 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialProvider from 'next-auth/providers/credentials';
-import crypto from 'crypto';
 import { userService } from '../../../libs/services/user/user.service';
 
 export const authOptions: NextAuthOptions = {

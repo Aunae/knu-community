@@ -1,0 +1,25 @@
+.form_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 400px;
+  justify-content: space-between;
+  width: 24rem;
+  padding: 2rem 1.5rem;
+  background-color: white;
+
+  label {
+    color: var(--black-alpha-2);
+  }
+
+  input {
+    width: 100%;
+    outline: none;
+    padding: 0.5rem 0.25rem;
+    margin-bottom: 1rem;
+    background-color: rgb(249, 250, 251);
+    color: var(--black-alpha-2);
+
+  }
+}
+
